@@ -50,7 +50,7 @@ function initSelectTree(id, isMultiple, chkboxType) {
     //$("#" + treeId + "Show").attr("title", "日志管理");
     //$("#" + treeId + "Hide").attr("value", "13");
     //alert($('#parentTreeHide').val());
-    //menuTrees.expandAll(true);
+    menuTrees.expandAll(true);
 }
 
 function beforeClick(treeId, treeNode) {

@@ -17,7 +17,7 @@
 							<input class="layui-input" id="searchValue" autocomplete="off" style="width: 300px" placeholder="输入角色名/编码/备注...">
 						</div>
 						<button class="layui-btn" data-type="reload" id="search">搜索</button>
-						<button class="layui-btn" data-type="reload" id="add">新增</button>
+						<button class="layui-btn" data-type="reload" id="add" shiro:hasPermission="sys:role:add">新增</button>
 					</div>
 
 					<table class="layui-hide" id="laytable" lay-filter="filtertable"></table>
@@ -29,6 +29,7 @@
 
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
+    var editFlag = [[${@permissionService.hasPermi('sys:role:edit')}]];
     var prefix = ctx + "sys/role";
     layui.use('table', function(){
         var $ = layui.$;
@@ -161,7 +162,7 @@
 
 <script type="text/html" id="toolbar">
 	<a class="layui-btn layui-btn-xs" lay-event="setupMenu">设置菜单</a>
-	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-xs" lay-event="edit" shiro:hasPermission="sys:role:edit">编辑</a>
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 </body>

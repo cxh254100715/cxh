@@ -39,9 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectPermsByUserId" parameterType="Long" resultType="String">
-		select distinct m.perms
+		select distinct m.code
 		from sys_menu m
-			 left join sys_role_menu rm on m.menu_id = rm.menu_id
+			 left join sys_role_menu rm on m.id = rm.menu_id
 			 left join sys_user_role ur on rm.role_id = ur.role_id
 		where ur.user_id = #{userId}
 	</select>
@@ -55,11 +55,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectMenuAll" resultMap="MenuResult">
-		select * from sys_menu where type = 0
+		select * from sys_menu
 	</select>
 	
 	<select id="selectMenuTreeAll" resultMap="MenuResult">
-		select * from sys_menu where type = 0 and status = 0 and (parent_id = 0 or parent_id is null)
+		select * from sys_menu where type = 0 and status = 0
 	</select>
 	
 	<delete id="deleteMenuById" parameterType="Long">

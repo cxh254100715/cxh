@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * area
@@ -55,6 +56,10 @@ public class AreaController extends BaseController
     public String edit(@PathVariable("id") Long id, Model model)
     {
         Area area = areaService.selectAreaById(id);
+        if(area.getParentId()!=null&&area.getParentId()!=0){
+            String parentName = areaService.selectAreaById(area.getParentId()).getName();
+            area.setParentName(parentName);
+        }
         model.addAttribute("area", area);
         return prefix + "/edit";
     }
@@ -73,6 +78,17 @@ public class AreaController extends BaseController
     }
 
     /**
+     * tree列表
+     */
+    @GetMapping("/list1")
+    @ResponseBody
+    public List<Area> list1(Long parentId)
+    {
+        List<Area> list = areaService.selectAreaList1(parentId);
+        return list;
+    }
+
+    /**
      * 保存
      */
     @PostMapping("/save")
@@ -80,15 +96,26 @@ public class AreaController extends BaseController
     @ResponseBody
     public Message save(Area area)
     {
-        if (!areaService.checkNameUnique(area).equals("0"))
+        /*if (!areaService.checkNameUnique(area).equals("0"))
         {
             return Message.error(1,"名称重复！");
-        }
+        }*/
         if (areaService.saveArea(area) > 0)
         {
             return Message.ok();
         }
         return Message.error();
+    }
+
+    /**
+     * 加载下拉列表树
+     */
+    @GetMapping("/areaTreeData")
+    @ResponseBody
+    public List<Map<String, Object>> areaTreeData()
+    {
+        List<Map<String, Object>> tree = areaService.areaTreeData();
+        return tree;
     }
 
     /**

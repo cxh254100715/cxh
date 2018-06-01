@@ -40,6 +40,7 @@ public class RoleController extends BaseController
     /**
      * 新增 页面
      */
+    @RequiresPermissions("sys:role:add")
     @GetMapping("/add")
     public String add()
     {
@@ -49,6 +50,7 @@ public class RoleController extends BaseController
     /**
      * 编辑 页面
      */
+    @RequiresPermissions("sys:role:edit")
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model)
     {

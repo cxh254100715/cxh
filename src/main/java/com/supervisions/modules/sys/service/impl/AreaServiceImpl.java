@@ -5,13 +5,12 @@ import com.supervisions.common.utils.StringUtils;
 import com.supervisions.common.utils.security.ShiroUtils;
 import com.supervisions.modules.sys.dao.IAreaDao;
 import com.supervisions.modules.sys.mapper.Area;
+import com.supervisions.modules.sys.mapper.Menu;
 import com.supervisions.modules.sys.service.IAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * area 业务层处理
@@ -27,6 +26,12 @@ public class AreaServiceImpl implements IAreaService
     public List<Area> selectAreaList(Area area)
     {
         return areaDao.selectAreaList(area);
+    }
+
+    @Override
+    public List<Area> selectAreaList1(Long parentId)
+    {
+        return areaDao.selectAreaList1(parentId);
     }
 
     @Override
@@ -83,6 +88,32 @@ public class AreaServiceImpl implements IAreaService
     public Map<String, String> selectPCAById(Long id)
     {
         return areaDao.selectPCAById(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> areaTreeData()
+    {
+        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Area> areaList = areaDao.selectAreaTreeAll();
+        trees = getTrees(areaList);
+        return trees;
+    }
+
+    /**
+     * 对象转菜单树
+     */
+    public List<Map<String, Object>> getTrees(List<Area> areaList)
+    {
+        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        for (Area area : areaList)
+        {
+            Map<String, Object> deptMap = new HashMap<String, Object>();
+            deptMap.put("id", area.getId());
+            deptMap.put("pId", area.getParentId());
+            deptMap.put("name", area.getName());
+            trees.add(deptMap);
+        }
+        return trees;
     }
 
 

@@ -1,6 +1,7 @@
 package com.supervisions.modules.sys.dao;
 
 import com.supervisions.modules.sys.mapper.Area;
+import com.supervisions.modules.sys.mapper.Menu;
 
 import java.util.List;
 import java.util.Map;
@@ -56,4 +57,8 @@ public interface IAreaDao
     public List<Area> selectAreaByParentId(Long parentId);
 
     public Map<String,String> selectPCAById(Long id);
+
+    public List<Area> selectAreaList1(Long parentId);
+
+    List<Area> selectAreaTreeAll();
 }

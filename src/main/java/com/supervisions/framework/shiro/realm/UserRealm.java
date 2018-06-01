@@ -4,6 +4,8 @@ import com.supervisions.common.exception.user.*;
 import com.supervisions.common.utils.security.ShiroUtils;
 import com.supervisions.framework.shiro.service.LoginService;
 import com.supervisions.modules.sys.mapper.User;
+import com.supervisions.modules.sys.service.impl.MenuServiceImpl;
+import com.supervisions.modules.sys.service.impl.RoleServiceImpl;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -23,6 +25,10 @@ public class UserRealm extends AuthorizingRealm
 
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private RoleServiceImpl roleService;
+    @Autowired
+    private MenuServiceImpl menuService;
 
     /**
      * 授权
@@ -33,9 +39,9 @@ public class UserRealm extends AuthorizingRealm
         Long userId = ShiroUtils.getUserId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         // 角色加入AuthorizationInfo认证对象
-        //info.setRoles(roleService.selectRoleKeys(userId));
+        info.setRoles(roleService.selectRoleKeys(userId));
         // 权限加入AuthorizationInfo认证对象
-        //info.setStringPermissions(menuService.selectPermsByUserId(userId));
+        info.setStringPermissions(menuService.selectPermsByUserId(userId));
         return info;
     }
 

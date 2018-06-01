@@ -12,7 +12,7 @@ public class Area extends PageDomain
 	/** 名称 */
     private String name;
     /** 父级id */
-    private String parentId;
+    private Long parentId;
     /** 父级id */
     private String parentName;
     /** 拼音首字母 */
@@ -28,6 +28,10 @@ public class Area extends PageDomain
 	/** 备注 */
     private String remark;
 
+    private Boolean _children = true;
+
+    private Long pid;
+
     public String getName()
     {
         return name;
@@ -38,12 +42,12 @@ public class Area extends PageDomain
         this.name = name;
     }
 
-    public String getParentId()
+    public Long getParentId()
     {
         return parentId;
     }
 
-    public void setParentId(String parentId)
+    public void setParentId(Long parentId)
     {
         this.parentId = parentId;
     }
@@ -116,5 +120,26 @@ public class Area extends PageDomain
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public Boolean get_children()
+    {
+        return _children;
+    }
+
+    public void set_children(Boolean _children)
+    {
+        this._children = _children;
+    }
+
+    public Long getPid()
+    {
+        pid = parentId;
+        return pid;
+    }
+
+    public void setPid(Long pid)
+    {
+        this.pid = pid;
     }
 }

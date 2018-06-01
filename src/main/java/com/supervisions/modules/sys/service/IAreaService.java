@@ -18,6 +18,8 @@ public interface IAreaService
      */
     public List<Area> selectAreaList(Area area);
 
+    public List<Area> selectAreaList1(Long parentId);
+
     /**
      * 根据id查询对象
      * @param id
@@ -49,4 +51,6 @@ public interface IAreaService
     public List<Area> selectAreaByParentId(Long parentId);
 
     public Map<String,String> selectPCAById(Long id);
+
+    List<Map<String,Object>> areaTreeData();
 }

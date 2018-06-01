@@ -41,6 +41,10 @@
         </where>
     </select>
 
+    <select id="selectAreaList1" parameterType="Long" resultMap="AreaResult">
+        select * from sys_area where parent_id = #{parentId}
+    </select>
+
     <select id="selectAreaById" parameterType="Long" resultMap="AreaResult">
 		select *
 		from sys_area
@@ -51,6 +55,10 @@
 		select sa1.id area, sa1.name areaName, sa2.id city, sa2.name cityName, sa3.id province, sa3.name provinceName
 		from sys_area sa1 left join sys_area sa2 on sa1.parent_id = sa2.id left join sys_area sa3 on sa2.parent_id = sa3.id
 		where sa1.id = #{id}
+	</select>
+
+    <select id="selectAreaTreeAll" resultMap="AreaResult">
+		select * from sys_area sa1 where sa1.parent_id in (select sa2.id from sys_area sa2 where sa2.parent_id = 0) union select * from sys_area sa3 where sa3.parent_id = 0
 	</select>
 
     <select id="selectAreaByParentId" parameterType="Long" resultMap="AreaResult">
