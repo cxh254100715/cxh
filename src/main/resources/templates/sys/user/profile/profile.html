@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+<link href="/supervisions/css/admin.css" th:href="@{/supervisions/css/admin.css}" rel="stylesheet"/>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">设置我的资料</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form layui-form-pane" action="" id="user_form">
+                    <input type="hidden" id="id" name="id" th:value="${user.id}"/>
+                    <div class="layui-form" lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">我的角色:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="roleNames" th:value="${roleNames}" readonly class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">登录名:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="loginName" th:value="${user.loginName}" readonly class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">昵称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="nickName" th:value="${user.nickName}" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">邮箱:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" th:value="${user.email}" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">手机:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="phone" th:value="${user.phone}" placeholder="请输入手机" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">性别:</label>
+                            <div class="layui-input-inline">
+                                <select id="sex" name="sex" lay-verify="required">
+                                    <option value="0">男</option>
+                                    <option value="1">女</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formSubmit">确认修改</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "sys/user";
+
+    layui.use('form', function() {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function(data) {
+            $.post(prefix + "/updateProfile", $('#user_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon:1,time:5000});
+                }else{
+                    layer.msg(data.msg,{icon:2,time:5000});
+                }
+            }, 'json');
+            return false;
+        });
+
+        $("#sex").val([[${user.sex}]]);
+        renderForm();
+    });
+
+    function renderForm(){
+        layui.use('form',function(){
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

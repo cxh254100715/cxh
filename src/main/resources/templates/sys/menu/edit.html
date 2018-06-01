@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<meta charset="utf-8">
+
+	<head th:include="include :: header"></head>
+	<link href="/js/jquery-ztree/3.5/css/metro/zTreeStyle.css" th:href="@{/js/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+	<link href="/js/jquery-ztree/index.css" th:href="@{/js/jquery-ztree/index.css}" rel="stylesheet"/>
+
+	<body>
+		<form class="layui-form layui-form-pane" action="" id="role_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+			<input type="hidden" id="id" name="id" th:value="${menu.id}"/>
+			<input type="hidden" id="parentId" name="parentId" th:value="${menu.parentId}"/>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">上级菜单:</label>
+				<div class="layui-input-inline">
+					<div id="parentTree" class="select-tree layui-form-select">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span style="color:red">*  </span>菜单名:</label>
+				<div class="layui-input-block">
+					<input type="text" name="name" required lay-verify="required" th:value="${menu.name}" placeholder="请输入菜单名" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">菜单地址:</label>
+				<div class="layui-input-block">
+					<input type="text" name="url" th:value="${menu.url}" placeholder="请输入地址" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">菜单编码:</label>
+				<div class="layui-input-block">
+					<input type="text" name="code" th:value="${menu.code}" placeholder="请输入菜单编码" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">排序:</label>
+				<div class="layui-input-block">
+					<input type="text" name="orderNo" th:value="${menu.orderNo}" placeholder="请输入排序" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">图标:</label>
+				<div class="layui-input-block">
+					<input type="text" name="icon" th:value="${menu.icon}" placeholder="请输入图标" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">状态:</label>
+				<div class="layui-input-block" style="width:20%">
+					<select id="status" name="status" lay-verify="required">
+						<option value="0">启用</option>
+						<option value="1">停用</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">类型:</label>
+				<div class="layui-input-block" style="width:20%">
+					<select id="type" name="type" lay-verify="required">
+						<option value="0">菜单</option>
+						<option value="1">功能</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注:</label>
+				<div class="layui-input-block">
+					<textarea name="remark" id="remark" placeholder="请输入备注" class="layui-textarea"></textarea>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+
+		<div th:include="include :: footer"></div>
+		<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+		<script src="/js/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js" th:src="@{/js/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
+		<script src="/js/jquery-ztree/selectTree.js" th:src="@{/js/jquery-ztree/selectTree.js}"></script>
+
+		<script th:inline="javascript">
+            layui.use(['form', 'element'], function () {
+            });
+
+            var zNodes=[];
+            $.get(ctx + "sys/menu/menuTreeData", function(data) {
+                zNodes = data;
+                //alert(JSON.stringify(zNodes));
+                initSelectTree("parentTree", false);
+                $(".layui-nav-item a").bind("click", function () {
+                    if (!$(this).parent().hasClass("layui-nav-itemed") && !$(this).parent().parent().hasClass("layui-nav-child")) {
+                        $(".layui-nav-tree").find(".layui-nav-itemed").removeClass("layui-nav-itemed")
+                    }
+                })
+                $("#parentTreeShow").attr("value", [[${menu.parentName}]]);
+                $("#parentTreeShow").attr("title", [[${menu.parentName}]]);
+                $("#parentTreeHide").attr("value", [[${menu.parentId}]]);
+            }, null, null, "正在加载，请稍后...");
+		</script>
+
+		<script th:inline="javascript">
+            var prefix = ctx + "sys/menu";
+            layui.use('form', function () {
+                var $ = layui.$;
+                var form = layui.form;
+
+                //监听提交
+                form.on('submit(formSubmit)', function (data) {
+                    $('#parentId').val($('#parentTreeHide').val());
+                    $.post(prefix + "/save", $('#role_form').serialize(), function (data) {
+                        if (data.code == 0) {
+                            parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                            parent.layui.table.reload('laytable', {});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        } else {
+                            layer.msg(data.msg, {icon: 2, time: 5000});
+                        }
+                    }, 'json');
+                    return false;
+                });
+
+                $("#remark").val([[${menu.remark}]]);
+                $("#type").val([[${menu.type}]]);
+                $("#status").val([[${menu.status}]]);
+                renderForm();
+            });
+
+            function renderForm() {
+                layui.use('form', function () {
+                    layui.form.render('select');
+                });
+            }
+		</script>
+	</body>
+</html>

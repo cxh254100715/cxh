@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="area_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="id" name="id" th:value="${area.id}"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">父级id:</label>
+        <div class="layui-input-block">
+            <input type="text" name="parentId" th:value="${area.parentId}" placeholder="请输入父级id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>名称:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" th:value="${area.name}" required lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">拼音首字母:</label>
+        <div class="layui-input-block">
+            <input type="text" name="initials" th:value="${area.initials}" placeholder="请输入拼音首字母" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">拼音全拼:</label>
+        <div class="layui-input-block">
+            <input type="text" name="pinyin" th:value="${area.pinyin}" placeholder="请输入拼音首字母集合" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">行政级别:</label>
+        <div class="layui-input-block">
+            <input type="text" name="suffix" th:value="${area.suffix}" placeholder="请输入行政级别" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">行政代码:</label>
+        <div class="layui-input-block">
+            <input type="text" name="code" th:value="${area.code}" placeholder="请输入行政代码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序:</label>
+        <div class="layui-input-block">
+            <input type="text" name="orderNo" th:value="${area.orderNo}" placeholder="请输入排序" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态:</label>
+        <div class="layui-input-block" style="width:20%">
+            <select id="status" name="status" lay-verify="required">
+                <option value="0">启用</option>
+                <option value="1">停用</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注:</label>
+        <div class="layui-input-block">
+            <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "sys/area";
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $.post(prefix + "/save", $('#area_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+
+        $("#remark").val([[${area.remark}]]);
+        $("#status").val([[${area.status}]]);
+        renderForm();
+    });
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="merchant_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="id" name="id" th:value="${merchant.id}"/>
+    <input type="hidden" id="areaId" name="areaId"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>名称:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" th:value="${merchant.name}" required lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系人:</label>
+        <div class="layui-input-block">
+            <input type="text" name="contact" th:value="${merchant.contact}" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机:</label>
+        <div class="layui-input-block">
+            <input type="text" name="mobile" th:value="${merchant.mobile}" placeholder="请输入手机" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话:</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone1" th:value="${merchant.phone1}" placeholder="请输入电话" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">备用电话:</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone2" th:value="${merchant.phone2}" placeholder="请输入备用电话" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>省市县:</label>
+        <div class="layui-input-block">
+            <div class="layui-input-inline" style="width: 30%;">
+                <select name="province" lay-filter="province" lay-search>
+                    <option value="">请选择省</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 30%;">
+                <select name="city" lay-filter="city" disabled lay-search>
+                    <option value="">请选择市</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 30%;">
+                <select name="area" lay-filter="area" disabled lay-search lay-verify="required">
+                    <option value="">请选择县/区</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">详细地址:</label>
+        <div class="layui-input-block">
+            <input type="text" name="address" th:value="${merchant.address}" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">短简介:</label>
+        <div class="layui-input-block">
+            <input type="text" name="sIntro" th:value="${merchant.sIntro}" placeholder="请输入短简介" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">长简介:</label>
+        <div class="layui-input-block">
+            <input type="text" name="lIntro" th:value="${merchant.lIntro}" placeholder="请输入长简介" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核状态:</label>
+        <div class="layui-input-block" style="width:20%">
+            <select id="auditStatus" name="auditStatus" lay-verify="required">
+                <option value="0">未审核</option>
+                <option value="1">已审核</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="/supervisions/js/address.js" th:src="@{/supervisions/js/address.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "mer/merchant";
+
+    setTimeout(function () {
+        $.ajaxSetup({async : false});
+        //alert([[${areas.province}]]);
+        $('select[name="province"]').siblings("div.layui-form-select").find('dl').find('dd[lay-value=[[${areas.province}]]]').click();
+        //alert([[${areas.city}]]);
+        $('select[name="city"]').siblings("div.layui-form-select").find('dl').find('dd[lay-value=[[${areas.city}]]]').click();
+        //alert([[${areas.area}]]);
+        $('select[name="area"]').siblings("div.layui-form-select").find('dl').find('dd[lay-value=[[${areas.area}]]]').click();
+    },200);
+
+    layui.config({
+        base : "/supervisions/js/"
+    }).extend({
+        "address" : "address"
+    })
+
+    layui.use(['jquery',"address"],function() {
+        var address = layui.address(),
+            $ = layui.jquery;
+    })
+
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $('#areaId').val($('select[name="area"]').val());
+            $.post(prefix + "/save", $('#merchant_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+        $("#auditStatus").val([[${merchant.auditStatus}]]);
+        renderForm();
+    });
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

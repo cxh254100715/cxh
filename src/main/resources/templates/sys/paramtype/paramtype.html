@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+<link href="/supervisions/css/admin.css" th:href="@{/supervisions/css/admin.css}" rel="stylesheet"/>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="test-table-reload-btn" style="margin-bottom: 10px;">
+
+                        <div class="layui-inline">
+                            <input class="layui-input" id="searchValue" autocomplete="off" style="width: 300px" placeholder="输入名称...">
+                        </div>
+                        <button class="layui-btn" data-type="reload" id="search">搜索</button>
+                        <button class="layui-btn" data-type="reload" id="add">新增</button>
+                    </div>
+
+                    <table class="layui-hide" id="laytable" lay-filter="filtertable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "sys/paramtype";
+    layui.use('table', function(){
+        var $ = layui.$;
+        var table = layui.table;
+
+        table.render({
+            elem: "#laytable",
+            url: prefix + "/list",
+            method: "get",
+            where: {sort: 'id', order: 'desc'},
+            height: 'full-100',
+            cellMinWidth: 80,
+            page: true,
+            limit: 10,
+            loading: true,
+            cols: [
+                [
+                    {type:'checkbox'},
+                    {title:'序号', type:'numbers'},
+					{field:'name', title:'名称', sort:true, align:'center'},
+					{field:'code', title:'编码', sort:true, align:'center'},
+                    {field:'orderNo', title:'排序', sort:true, align:'center'},
+					{field:'type', title:'类型', sort:true, align:'center', templet: function(d){
+                            if(d.type == 0) return "工控机"; if(d.type == 1) return "电视"; if(d.type == 2) return "摄像头";
+                        }},
+					{field:'remark', title:'备注', sort:true, align:'center'},
+					{fixed:'right', title:'操作', width:180, align:'center', toolbar:'#toolbar'}
+        ]
+            ]
+        });
+
+        //监听排序
+        table.on('sort(filtertable)', function(obj){
+            table.reload('laytable', {initSort:obj, where:{sort:obj.field, order:obj.type}});
+        });
+
+        //监听工具条
+        table.on('tool(filtertable)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'edit'){
+                edit(data.id);
+            };
+            if(obj.event === 'detail'){
+                detail(data.id,data.name);
+            };
+            if(obj.event === 'del'){
+                layer.confirm("确定要删除选中的数据吗？", {
+                    icon: 3,
+                    title: "系统提示",
+                    btn: ['确认', '取消'],
+                    btnclass: ['btn btn-primary', 'btn btn-danger'],
+                }, function () {
+                    $.ajax({
+                        url: prefix + "/remove/" + data.id,
+                        type: "post",
+                        dataType: "json",
+                        data: data,
+                        success: function(result) {
+                            if (result.code == 0) {
+                                layer.msg(result.msg, {icon: 1, time: 5000});
+                                layui.table.reload('laytable', {});
+                                var index = layer.getFrameIndex(window.name);
+                                layer.close(index);
+                            } else {
+                                layer.msg(result.msg, {icon: 2, time: 5000});
+                            }
+                        }
+                    });
+                });
+            };
+        });
+
+        var active = {
+            reload: function(){
+                table.reload('laytable', {where:{searchValue:$('#searchValue').val()}});
+            }
+        };
+
+        // 查询
+        $('#search').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        // 新增
+        $('#add').on('click', function(){
+            var url = prefix + '/add';
+            layer.open({
+                type: 2,
+                area: ['40%', '90%'],
+                fix: false,
+                maxmin: true,
+                shade: 0.4,
+                title: "新增",
+                content: url
+            });
+        });
+
+        // 编辑
+        function edit(id) {
+            var url = prefix + '/edit/' + id;
+            layer.open({
+                type: 2,
+                area: ['40%', '90%'],
+                fix: false,
+                maxmin: true,
+                shade: 0.4,
+                title: "编辑",
+                content: url
+            });
+        }
+
+        // 详细
+        function detail(id,name) {
+            var url = prefix + '/detail/' + id;
+            layer.open({
+                type: 2,
+                area: ['100%', '100%'],
+                fix: false,
+                maxmin: true,
+                shade: 0.4,
+                title: name,
+                content: url
+            });
+        }
+
+    });
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="detail">详细</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+</html>

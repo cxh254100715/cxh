@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+<link href="/js/jquery-ztree/3.5/css/metro/zTreeStyle.css" th:href="@{/js/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+<body>
+<form class="layui-form layui-form-pane" action="" id="role_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="id" name="id" th:value="${role.id}"/>
+    <div class="layui-form-item">
+        <div id="menuTrees" class="ztree"></div>
+    </div>
+
+    <div class="layui-form-item" style="position:fixed; bottom:0; background-color:white;height:45px;width:100%;float:left;margin-bottom: 0px">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js" th:src="@{/js/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
+<script th:inline="javascript">
+
+    // 树结构初始化加载
+    var setting = {
+        check:{enable:true,nocheckInherit:true,chkboxType:{"Y":"ps","N":"ps"}},
+        view:{selectedMulti:false,nameIsHTML: true},
+        data:{simpleData:{enable:true},key:{title:"title"}},
+        callback:{
+            beforeClick: function (treeId, treeNode, clickFlag) {
+                var menuTrees = $.fn.zTree.getZTreeObj(treeId);
+                menuTrees.checkNode(treeNode, !treeNode.checked, true, true);
+                return false;
+            }
+        }
+    }, menuTrees, loadTree = function(){
+        $.get(ctx + "sys/menu/roleMenuTreeData?id=" + $("#id").val(), function(data) {
+            menuTrees = $.fn.zTree.init($("#menuTrees"), setting, data);
+            menuTrees.expandAll(true);
+        }, null, null, "正在加载，请稍后...");
+    };
+    loadTree();
+
+    function getCheckeds() {
+        var menuIds = "";
+        var treeNodes = menuTrees.getCheckedNodes(true);
+        for (var i = 0; i < treeNodes.length; i++) {
+            if (0 == i) {
+                menuIds = treeNodes[i].id;
+            } else {
+                menuIds += ("," + treeNodes[i].id);
+            }
+        }
+        return menuIds;
+    }
+
+    var prefix = ctx + "sys/role";
+    layui.use('form', function() {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function(data) {
+            $.post(prefix + "/saveMenus", {id:$('#id').val(),menuIds:getCheckeds}, function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg,{icon:1,time:5000});
+                    parent.layui.table.reload('laytable',{});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }else{
+                    layer.msg(data.msg,{icon:2,time:5000});
+                }
+            }, 'json');
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

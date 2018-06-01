@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="deviceinfo_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="isActivated" name="isActivated" value="1"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>序列号:</label>
+        <div class="layui-input-block">
+            <input type="text" name="serialNumber" required lay-verify="required" placeholder="请输入序列号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型:</label>
+        <div class="layui-input-block" style="width:20%">
+            <select id="type" name="type" lay-verify="required" lay-filter="type">
+                <option value="0">工控机</option>
+                <option value="1">电视</option>
+                <option value="2">摄像头</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备名:</label>
+        <div class="layui-input-block">
+            <select id="deviceId" name="deviceId" lay-verify="required">
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户:</label>
+        <div class="layui-input-block">
+            <select id="merchantId" name="merchantId" lay-verify="required" lay-filter="merchant">
+                <option value="">请选择...</option>
+                <option th:each="merchant:${merchants}" th:value="${merchant.id}" th:text="${merchant.name}"></option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户地址:</label>
+        <div class="layui-input-block">
+            <select id="merchantAddressId" name="merchantAddressId" lay-verify="required">
+
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注:</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "dev/deviceinfo";
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $.post(prefix + "/save", $('#deviceinfo_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+
+        form.on('select(type)', function(data){
+            changeType(data.value);
+        });
+
+        form.on('select(merchant)', function(data){
+            $.post(ctx + "mer/merchantaddress/getSelect",{parentId:data.value}, function(data){
+                var optionstring = "<option value='' >请选择...</option>";
+                $.each(data, function(i,item){
+                    optionstring += "<option value=\"" + item.value + "\" >" + item.text + "</option>";
+                });
+                $("#merchantAddressId").html(optionstring);
+                renderForm();
+            }, 'json');
+        });
+
+        renderForm();
+        $("#type").trigger('change');
+    });
+
+    $(function() {
+        $("#type").change(function () {
+            changeType($(this).val());
+        })
+    })
+
+    function changeType(value){
+        $.post(ctx + "dev/device/getSelect",{type:value}, function(data){
+            var optionstring = "<option value='' >请选择...</option>";
+            $.each(data, function(i,item){
+                optionstring += "<option value=\"" + item.value + "\" >" + item.text + "</option>";
+            });
+            $("#deviceId").html(optionstring);
+            renderForm();
+        }, 'json');
+    }
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

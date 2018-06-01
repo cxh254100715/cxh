@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+<link href="/supervisions/css/admin.css" th:href="@{/supervisions/css/admin.css}" rel="stylesheet"/>
+<body>
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-md12">
+			<div class="layui-card">
+				<div class="layui-card-header">修改密码</div>
+				<div class="layui-card-body" pad15>
+					<form class="layui-form layui-form-pane" action="" id="user_form">
+					<div class="layui-form" lay-filter="">
+						<input type="hidden" id="id" name="id" th:value="${user.id}"/>
+						<div class="layui-form-item">
+							<label class="layui-form-label">当前密码</label>
+							<div class="layui-input-inline">
+								<input type="password" name="oldPassword" lay-verify="required|pass" lay-verType="tips" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">新密码</label>
+							<div class="layui-input-inline">
+								<input type="password" name="password" lay-verify="required|pass" lay-verType="tips" autocomplete="off" id="password" class="layui-input">
+							</div>
+							<div class="layui-form-mid layui-word-aux">至少5个字符</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">确认新密码</label>
+							<div class="layui-input-inline">
+								<input type="password" name="repassword" lay-verify="repass" lay-verType="tips" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn" lay-submit lay-filter="formSubmit">确认修改</button>
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "sys/user";
+
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        form.verify({
+            pass: [
+                /^[\S]{5,20}$/
+                ,'密码必须5到20位'
+            ]
+        });
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $.post(prefix + "/updatePwd", $("#user_form").serialize(), function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {icon: 1, time: 5000});
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="device_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="id" name="id" th:value="${device.id}"/>
+    <input type="hidden" id="param" name="param"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>名称:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required lay-verify="required" th:value="${device.name}" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>类型:</label>
+        <div class="layui-input-block" style="width:20%">
+            <select id="type" name="type" required lay-verify="required" lay-filter="filter">
+                <option value="0">工控机</option>
+                <option value="1">电视</option>
+                <option value="2">摄像头</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">型号:</label>
+        <div class="layui-input-block">
+            <input type="text" name="model" th:value="${device.model}" placeholder="请输入型号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div id="selects"></div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注:</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" th:value="${device.remark}" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "dev/device";
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            var param = '';
+            $("#selects>div").each(function(){
+                if($(this).find("select").val()!=''){
+                    param += $(this).find("select").val() + ",";
+                }
+            });
+            $('#param').val(param.substring(0,param.length-1));
+            $.post(prefix + "/save", $('#device_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+        $("#type").val([[${device.type}]]);
+
+        //renderForm();
+        form.on('select(filter)', function(data){
+            $("#selects").html("");
+            if(data.value!=''&&data.value!=null){
+                $.post(ctx + "sys/paramdata/getSelectByType", {type:data.value}, function (data) {
+                    if(data.code==0){
+                        var data1 = data.datas;
+                        //alert(JSON.stringify(data1));
+                        for(var j=0; j<data1.length; j++){
+                            var option = "<option value=\"\">请选择...</option>";
+                            var data2 = data1[j].datas;
+                            for(var i=0; i<data2.length; i++){
+                                option += "<option value=\""+data2[i].value+"\">"+data2[i].text+"</option>";
+                            }
+                            $("#selects").append($('<div class="layui-form-item"><label class="layui-form-label">'+data1[j].name+'</label><div class="layui-input-block" style=""><select xm-select="select" xm-select-type="2" xm-select-skin="primary" xm-select-search>'+option+'</select></div></div>'));
+                        }
+
+                        renderForm();
+                    }else{
+                        layer.msg(data.msg, {icon: 2, time: 5000});
+                    }
+                }, 'json');
+            }
+        });
+
+        renderForm();
+        $("#type").trigger('change');
+    });
+
+    $(function(){
+        $("#type").change(function(){
+            $("#selects").html("");
+            if($(this).val()!=''&&$(this).val()!=null){
+                $.post(ctx + "sys/paramdata/getSelectByType", {type:$(this).val()}, function (data) {
+                    if(data.code==0){
+                        var data1 = data.datas;
+                        //alert(JSON.stringify(data1));
+                        var paramStr = [[${device.param}]];
+                        var paramSplit = paramStr.split(",");
+                        //if(paramSplit.length==0){
+                        //    paramSplit.push(paramStr);
+                        //}
+                        for(var j=0; j<data1.length; j++){
+                            var option = "<option value=\"\">请选择...</option>";
+                            var data2 = data1[j].datas;
+                            for(var i=0; i<data2.length; i++){
+                                var mark = '';
+                                //alert(paramSplit.length);
+                                mark:for(var k=0;k<paramSplit.length;k++){
+                                    if(data2[i].value==paramSplit[k]) {
+                                        mark = '1';
+                                        break mark;
+                                    }
+                                }
+                                if(mark=='1'){
+                                    option += "<option value=\""+data2[i].value+"\" selected='selected'>"+data2[i].text+"</option>";
+                                }else{
+                                    option += "<option value=\""+data2[i].value+"\">"+data2[i].text+"</option>";
+                                }
+                            }
+                            $("#selects").append($('<div class="layui-form-item"><label class="layui-form-label">'+data1[j].name+'</label><div class="layui-input-block" style=""><select xm-select="select" xm-select-type="2" xm-select-skin="primary" xm-select-search>'+option+'</select></div></div>'));
+                        }
+
+                        renderForm();
+                    }else{
+                        layer.msg(data.msg, {icon: 2, time: 5000});
+                    }
+                }, 'json');
+            }
+        });
+        // 加载后默认触发select获取值
+        //alert($("#type").val());
+        //$("#type").trigger('change');
+        //renderForm();
+    })
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervisions.modules.dev.dao.IDeviceDao">
+
+    <resultMap type="Device" id="DeviceResult">
+        <id     property="id"	column="id"	/>
+        <result property="createTime"	column="create_time"	/>
+        <result property="createUser"	column="create_user"	/>
+        <result property="updateTime"	column="update_time"	/>
+        <result property="updateUser"	column="update_user"	/>
+        <result property="status"	column="status"	/>
+        <result property="version"	column="version"	/>
+		<result property="name"	column="name"	/>
+        <result property="type"	column="type"	/>
+        <result property="model"	column="model"	/>
+        <result property="param"	column="param"	/>
+        <result property="remark"	column="remark"	/>
+        </resultMap>
+
+    <select id="selectDeviceList" parameterType="Device" resultMap="DeviceResult">
+        select * from dev_device
+        <where>
+            <if test="searchValue != null and searchValue != ''">
+                <bind name="bindSearchValue" value="'%' + searchValue + '%'" />
+                AND CONCAT(name) LIKE #{bindSearchValue}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectDeviceById" parameterType="Long" resultMap="DeviceResult">
+		select *
+		from dev_device
+		where id = #{id}
+	</select>
+
+    <select id="selectDeviceByType" parameterType="Integer" resultMap="DeviceResult">
+		select *
+		from dev_device
+		where type = #{type}
+	</select>
+
+    <select id="checkNameUnique" parameterType="String" resultMap="DeviceResult">
+		select *
+		from dev_device where name=#{name}
+	</select>
+
+    <select id="selectCountDeviceinfoByDeviceId" resultType="Integer">
+		select count(*)
+		from dev_device_info where device_id = #{id}
+	</select>
+
+    <delete id="deleteDeviceById" parameterType="Long">
+ 		delete from dev_device where id = #{id}
+ 	</delete>
+
+    <update id="updateDevice" parameterType="Device">
+        update dev_device
+        <set>
+            update_time = #{updateTime},
+            update_user = #{updateUser},
+            status = #{status},
+			name = #{name},
+			type = #{type},
+			model = #{model},
+			param = #{param},
+			remark = #{remark}
+			</set>
+        where 1=1
+        and id = #{id}
+    </update>
+
+    <insert id="insertDevice" parameterType="Device">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+            select nextval('device_id');
+        </selectKey>
+        insert into dev_device(<trim suffixOverrides=",">
+        id,
+        create_time,
+        create_user,
+        status,
+		name,
+        type,
+        model,
+        param,
+        remark
+        </trim>
+        )values(<trim suffixOverrides=",">
+        #{id},
+        #{createTime},
+        #{createUser},
+        #{status},
+		#{name},
+        #{type},
+        #{model},
+        #{param},
+        #{remark}
+        </trim>
+        )
+    </insert>
+
+</mapper>

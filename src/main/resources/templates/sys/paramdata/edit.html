@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="paramdata_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="id" name="id" th:value="${paramdata.id}"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" th:value="${paramdata.name}" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">值:</label>
+        <div class="layui-input-block">
+            <input type="text" name="value" th:value="${paramdata.value}" placeholder="请输入值" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序:</label>
+        <div class="layui-input-block">
+            <input type="text" name="orderNo" th:value="${paramdata.orderNo}" placeholder="请输入排序" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注:</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" th:value="${paramdata.remark}" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "sys/paramdata";
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $.post(prefix + "/save", $('#paramdata_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+        $("#status").val([[${paramdata.status}]]);
+        renderForm();
+    });
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

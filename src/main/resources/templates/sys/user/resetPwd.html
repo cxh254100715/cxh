@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="user_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+	<input type="hidden" id="id" name="id" th:value="${user.id}"/>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">登录名:</label>
+		<div class="layui-input-block">
+			<input type="text" name="loginName" th:value="${user.loginName}" readonly="true" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">密码:</label>
+		<div class="layui-input-block">
+			<input type="password" name="password" required lay-verify="required|pass" th:value="123456" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "sys/user";
+
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        form.verify({
+            pass: [
+                /^[\S]{5,20}$/
+                ,'密码必须5到20位'
+            ]
+        });
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $.post(prefix + "/resetPwd", $("#user_form").serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+    });
+
+</script>
+</body>
+</html>

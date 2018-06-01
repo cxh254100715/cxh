@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+<link href="/supervisions/css/admin.css" th:href="@{/supervisions/css/admin.css}" rel="stylesheet"/>
+
+<body>
+<div class="layui-fluid">
+	<div class="layui-row">
+		<div class="layui-col-md12">
+			<div class="layui-card">
+				<div class="layui-card-body">
+					<div class="test-table-reload-btn" style="margin-bottom: 10px;">
+
+						<div class="layui-inline">
+							<input class="layui-input" id="searchValue" autocomplete="off" style="width: 300px" placeholder="输入登录账户/昵称/邮箱/电话号码...">
+						</div>
+						<button class="layui-btn" data-type="reload" id="search">搜索</button>
+						<button class="layui-btn" data-type="reload" id="add">新增</button>
+					</div>
+
+					<table class="layui-hide" id="laytable" lay-filter="filtertable"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+        var prefix = ctx + "sys/user";
+        layui.use('table', function(){
+            var $ = layui.$;
+			var table = layui.table;
+
+            table.render({
+                elem: "#laytable",
+				url: prefix + "/list",
+				method: "get",
+                where: {sort: 'id', order: 'desc'},
+                height: 'full-100',
+                cellMinWidth: 80,
+                page: true,
+                limit: 10,
+                loading: true,
+                cols: [
+                	[
+                    	{type:'checkbox'},
+                        {title:'序号', type:'numbers'},
+						{field:'loginName', title:'登录账户', sort:true, align:'center'},
+                    	{field:'nickName', title:'昵称', sort:true, align:'center'},
+                    	{field:'email', title:'邮箱', sort:true, align:'center'},
+                    	{field:'phone', title:'电话号码', sort:true, align:'center'},
+                        {field:'sex', title:'性别', sort:true, align:'center', templet: function(d){
+                            if(d.sex == 0) return "男"; if(d.sex == 1) return "女";
+                        }},
+                        {field:'roleNames', title:'角色', sort:true, align:'center'},
+                        {field:'createTime', title:'创建时间', sort:true, align:'center'},
+                        {field:'status', title:'状态', sort:true, align:'center', templet: function(d){
+                                if(d.status == 0) return "启用"; if(d.status == 1) return "停用";
+                        }},
+                        {fixed:'right', title:'操作', width:150, align:'center', toolbar:'#toolbar'}
+                	]
+				]
+            });
+
+            //监听排序
+            table.on('sort(filtertable)', function(obj){
+                table.reload('laytable', {initSort:obj, where:{sort:obj.field, order:obj.type}});
+            });
+
+            //监听工具条
+            table.on('tool(filtertable)', function(obj){
+                var data = obj.data;
+                if(obj.event === 'edit'){
+					edit(data.id);
+                };
+                if(obj.event === 'resetPwd'){
+                    resetPwd(data.id);
+                }
+            });
+
+            var active = {
+                reload: function(){
+                    table.reload('laytable', {where:{searchValue:$('#searchValue').val()}});
+                }
+            };
+
+            // 查询
+            $('#search').on('click', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            // 新增
+            $('#add').on('click', function(){
+                var url = prefix + '/add';
+                layer.open({
+                    type: 2,
+                    area: ['40%', '90%'],
+                    fix: false,
+                    maxmin: true,
+                    shade: 0.4,
+                    title: "新增用户",
+                    content: url
+                });
+            });
+
+            // 编辑
+            function edit(id) {
+                //if(id==1){
+                //    layer.msg("超级管理员禁止删除", {icon: 2, time: 5000});
+                //    return false;
+                //}
+                var url = prefix + '/edit/' + id;
+                layer.open({
+                    type: 2,
+                    area: ['40%', '90%'],
+                    fix: false,
+                    maxmin: true,
+                    shade: 0.4,
+                    title: "编辑用户",
+                    content: url
+                });
+            }
+
+            // 重置密码
+            function resetPwd(id) {
+                var url = prefix + '/resetPwd/' + id;
+                layer.open({
+                    type: 2,
+                    area: ['40%', '90%'],
+                    fix: false,
+                    maxmin: true,
+                    shade: 0.4,
+                    title: "重置密码",
+                    content: url
+                });
+            }
+        });
+	</script>
+
+	<script type="text/html" id="toolbar">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="resetPwd">重置密码</a>
+	</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="device_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="param" name="param"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>名称:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>类型:</label>
+        <div class="layui-input-block" style="width:20%">
+            <select id="type" name="type" required lay-verify="required" lay-filter="filter">
+                <option value="">请选择...</option>
+                <option value="0">工控机</option>
+                <option value="1">电视</option>
+                <option value="2">摄像头</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">型号:</label>
+        <div class="layui-input-block">
+            <input type="text" name="model" placeholder="请输入型号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div id="selects"></div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注:</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "dev/device";
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            //alert($('#device_form').serialize());
+            var param = '';
+            $("#selects>div").each(function(){
+                if($(this).find("select").val()!=''){
+                    param += $(this).find("select").val() + ",";
+                }
+            });
+            $('#param').val(param.substring(0,param.length-1));
+            $.post(prefix + "/save", $('#device_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    parent.layui.table.reload('laytable', {});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+
+        form.on('select(filter)', function(data){
+            $("#selects").html("");
+            if(data.value!=''&&data.value!=null){
+                $.post(ctx + "sys/paramdata/getSelectByType", {type:data.value}, function (data) {
+                    if(data.code==0){
+                        var data1 = data.datas;
+                        //alert(JSON.stringify(data1));
+                        for(var j=0; j<data1.length; j++){
+                            var option = "<option value=\"\">请选择...</option>";
+                            var data2 = data1[j].datas;
+                            for(var i=0; i<data2.length; i++){
+                                option += "<option value=\""+data2[i].value+"\">"+data2[i].text+"</option>";
+                            }
+                            $("#selects").append($('<div class="layui-form-item"><label class="layui-form-label">'+data1[j].name+'</label><div class="layui-input-block" style=""><select xm-select="select" xm-select-type="2" xm-select-skin="primary" xm-select-search>'+option+'</select></div></div>'));
+                        }
+
+                        renderForm();
+                    }else{
+                        layer.msg(data.msg, {icon: 2, time: 5000});
+                    }
+                }, 'json');
+            }
+        });
+
+        renderForm();
+    });
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>
