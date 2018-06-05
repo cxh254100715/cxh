@@ -1,7 +1,7 @@
 #\u5F00\u53D1\u73AF\u5883\u914D\u7F6E
 server:
   #\u7AEF\u53E3
-  port: 8080
+  port: 8081
   tomcat:
     uri-encoding: utf-8
 #\u65E5\u5FD7\u914D\u7F6E
