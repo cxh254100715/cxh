@@ -9,9 +9,9 @@
     <input type="hidden" id="paramId" name="paramId" th:value="${parentId}"/>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">名称:</label>
+        <label class="layui-form-label"><span style="color:red">*  </span>名称:</label>
         <div class="layui-input-block">
-            <input type="text" name="name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            <input type="text" name="name" required lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
         </div>
     </div>
     

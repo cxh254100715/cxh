@@ -45,5 +45,5 @@ public class CommonConstant
     /**
      * apk下载地址
      */
-    public static String APKURL = "http://supervisions.cn/file/";
+    public static String APKURL = "http://supervisions.cn:8080/file/";
 }

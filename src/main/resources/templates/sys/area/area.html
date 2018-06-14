@@ -41,7 +41,9 @@
             <td>  {{#  if(r.remark == 'null'){ }}
 
                 {{#  } }} </td>
-            <td style="width: 50px;"><a class="layui-btn layui-btn-xs" onclick="edit({{r.id}})">编辑</a></td>
+            <td style="width: 50px;">
+                <a class="layui-btn layui-btn-xs" onclick="edit({{r.id}})">编辑</a>
+            </td>
         </tr>
         {{# }); }}
         </tbody>

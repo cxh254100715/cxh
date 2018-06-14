@@ -57,9 +57,10 @@ public class ParamdataController extends BaseController
      * 编辑 页面
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, Model model)
+    public String edit(@PathVariable("id") Long id, Long parentId, Model model)
     {
         Paramdata paramdata = paramdataService.selectParamdataById(id);
+        model.addAttribute("parentId", parentId);
         model.addAttribute("paramdata", paramdata);
         return prefix + "/edit";
     }

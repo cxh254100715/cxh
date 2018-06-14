@@ -38,7 +38,7 @@
             elem: "#laytable",
             url: prefix + "/list",
             method: "get",
-            where: {sort: 'id', order: 'desc',paramId : [[${parentId}]]},
+            where: {sort: 'id+0', order: 'desc',paramId : [[${parentId}]]},
             height: 'full-100',
             cellMinWidth: 80,
             page: true,
@@ -124,7 +124,7 @@
 
         // 编辑
         function edit(id) {
-            var url = prefix + '/edit/' + id;
+            var url = prefix + '/edit/' + id + '?parentId=' + [[${parentId}]];
             layer.open({
                 type: 2,
                 area: ['40%', '90%'],
