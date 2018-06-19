@@ -14,8 +14,6 @@
         <result property="version"	column="version"	/>
 		<result property="name"	column="name"	/>
         <result property="parentId"	column="parent_id"	/>
-        <result property="initials"	column="initials"	/>
-        <result property="pinyin"	column="pinyin"	/>
         <result property="suffix"	column="suffix"	/>
         <result property="code"	column="code"	/>
         <result property="orderNo"	column="order_no"	/>
@@ -42,7 +40,7 @@
     </select>
 
     <select id="selectAreaList1" parameterType="Long" resultMap="AreaResult">
-        select * from sys_area where parent_id = #{parentId}
+        select * from sys_area where parent_id = #{parentId} order by order_no
     </select>
 
     <select id="selectAreaById" parameterType="Long" resultMap="AreaResult">
@@ -84,8 +82,6 @@
             status = #{status},
 			name = #{name},
             parent_id = #{parentId},
-            initials = #{initials},
-            pinyin = #{pinyin},
             suffix = #{suffix},
             code = #{code},
             order_no = #{orderNo},
@@ -106,8 +102,6 @@
         status,
         name,
         parent_id,
-        initials,
-        pinyin,
         suffix,
         code,
         order_no,
@@ -120,8 +114,6 @@
         #{status},
 		#{name},
         #{parentId},
-        #{initials},
-        #{pinyin},
         #{suffix},
         #{code},
         #{orderNo},
