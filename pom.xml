@@ -6,7 +6,7 @@
     <groupId>com.supervisions</groupId>
     <artifactId>supervisions_backstage</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>supervisions_backstage</name>
     <description>Demo project for Spring Boot</description>

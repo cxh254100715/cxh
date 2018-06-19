@@ -12,6 +12,8 @@ import com.supervisions.modules.sys.mapper.User;
 import com.supervisions.modules.sys.mapper.Versions;
 import com.supervisions.modules.sys.service.IVersionsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,8 @@ import java.util.Map;
 @RequestMapping("/sys/versions")
 public class VersionsController extends BaseController
 {
+
+    private static final Logger log = LoggerFactory.getLogger(VersionsController.class);
 
     private String prefix = "sys/versions";
 
@@ -113,15 +117,13 @@ public class VersionsController extends BaseController
         }
         if (versionsService.deleteVersionsById(id) > 0)
         {
-            String serverPath = request.getSession().getServletContext().getRealPath("");
-            String parentPath = new File(serverPath).getParent();
             String category = "";
             if(versions.getType()==0){
                 category = "android";
             }else if(versions.getType()==1){
                 category = "box";
             }
-            String filePath = parentPath+"//ROOT//file//"+category+"//"+versions.getVersionCode()+"//";
+            String filePath = CommonConstant.UPLOADURL + "file//"+category+"//"+versions.getVersionCode()+"//";
             FileUtils.DeleteFolder(filePath);
             return Message.ok();
         }
@@ -151,8 +153,8 @@ public class VersionsController extends BaseController
         if(!suffix.equals("apk")){
             return Message.error("请上传后缀为.apk文件");
         }*/
-        String serverPath = request.getSession().getServletContext().getRealPath("");
-        String parentPath = new File(serverPath).getParent();
+        //String serverPath = request.getSession().getServletContext().getRealPath("");
+        //String parentPath = new File(serverPath).getParent();
 
         /*Map<String,Object> mapApk = ReadUtil.readAPK(file);
         if(!mapApk.get("package").equals(CommonConstant.PACKSGE)){
@@ -166,7 +168,8 @@ public class VersionsController extends BaseController
         }else if(type==1){
             category = "box";
         }
-        String filePath = parentPath+"//ROOT//file//" + category + "//" + versionCode + "//";
+        //String filePath = parentPath+"//ROOT//file//" + category + "//" + versionCode + "//";
+        String filePath = CommonConstant.UPLOADURL + "file//" + category + "//" + versionCode + "//";
 
         try {
             FileUtils.uploadFile(file.getBytes(), filePath, fileName);

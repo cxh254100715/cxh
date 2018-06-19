@@ -1,4 +1,8 @@
 #开发环境配置
+web:
+  upload-path: /myfile/upload/
+  #front-path: d:/myfile/front/
+
 server:
   #\u7AEF\u53E3
   port: 8080
@@ -35,6 +39,9 @@ spring:
   devtools:
     restart:
       enabled: true
+  resources:
+    #static-locations: file:${web.upload-path},file:${web.front-path}
+    static-locations: classpath:/static/,file:${web.upload-path}
 # MyBatis
 mybatis:
     # 搜索指定包别名
