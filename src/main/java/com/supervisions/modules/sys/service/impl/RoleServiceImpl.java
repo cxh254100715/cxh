@@ -57,7 +57,9 @@ public class RoleServiceImpl implements IRoleService
         {
             if (StringUtils.isNotNull(perms))
             {
-                permsSet.addAll(Arrays.asList(perm.getCode().trim().split(",")));
+                if(StringUtils.isNotNull(perm.getCode())){
+                    permsSet.addAll(Arrays.asList(perm.getCode().trim().split(",")));
+                }
             }
         }
         return permsSet;
@@ -131,6 +133,7 @@ public class RoleServiceImpl implements IRoleService
         else
         {
             role.setCreateUser(ShiroUtils.getLoginName());
+            role.setCreateTime(new Date());
             // 新增角色信息
             return roleDao.insertRole(role);
         }
@@ -147,16 +150,19 @@ public class RoleServiceImpl implements IRoleService
         int rows = 1;
         // 新增用户与角色管理
         List<RoleMenu> list = new ArrayList<RoleMenu>();
+        Long[] menuIds = role.getMenuIds();
 
         if(StringUtils.isNotNull(role.getId())){
+            role = roleDao.selectRoleById(role.getId());
             role.setUpdateUser(ShiroUtils.getLoginName());
+            role.setUpdateTime(new Date());
             // 修改角色信息
             roleDao.updateRole(role);
             // 删除角色与菜单关联
             roleMenuDao.deleteRoleMenuByRoleId(role.getId());
         }
 
-        for (Long menuId : role.getMenuIds())
+        for (Long menuId : menuIds)
         {
             RoleMenu rm = new RoleMenu();
             rm.setRoleId(role.getId());
@@ -167,6 +173,7 @@ public class RoleServiceImpl implements IRoleService
         {
             rows = roleMenuDao.batchRoleMenu(list);
         }
+        ShiroUtils.clearCachedAuthorizationInfo();
         return rows;
     }
 

@@ -59,12 +59,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		update sys_role
  		<set>
  			<if test="name != null and name != ''">name = #{name},</if>
- 			<if test="code != null and code != ''">code = #{code},</if>
- 			<if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+ 			code = #{code},
+ 			order_no = #{orderNo},
  			<if test="status !=null">status = #{status},</if>
- 			<if test="remark != null and remark != ''">remark = #{remark},</if>
+ 			remark = #{remark},
  			<if test="updateUser != null and updateUser != ''">update_user = #{updateUser},</if>
- 			update_time = sysdate()
+ 			update_time = #{updateTime}
  		</set>
  		where 1=1
  		<if test="id != null">and id = #{id}</if>
@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
 			select nextval('role_id');
 		</selectKey>
- 		insert into sys_role(
+ 		insert into sys_role(<trim suffixOverrides=",">
  			<if test="id != null and id != 0">id,</if>
  			<if test="name != null and name != ''">name,</if>
  			<if test="code != null and code != ''">code,</if>
@@ -83,7 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createUser != null and createUser != ''">create_user,</if>
  			create_time
- 		)values(
+			</trim>
+ 		)values(<trim suffixOverrides=",">
  			<if test="id != null and id != 0">#{id},</if>
  			<if test="name != null and name != ''">#{name},</if>
  			<if test="code != null and code != ''">#{code},</if>
@@ -91,7 +92,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status !=null and status != ''">#{status},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createUser != null and createUser != ''">#{createUser},</if>
- 			sysdate()
+ 			#{createTime}
+			</trim>
  		)
 	</insert>
 	

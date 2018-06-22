@@ -85,7 +85,6 @@ public class PasswordService
 
     public static void main(String[] args)
     {
-        System.out.println(new PasswordService().encryptPassword("admin", "admin123", "111111"));
-        System.out.println(new PasswordService().encryptPassword("ry", "admin123", "222222"));
+        System.out.println(new PasswordService().encryptPassword("admin", "e10adc3949ba59abbe56e057f20f883e", "77aa9a"));
     }
 }

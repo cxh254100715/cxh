@@ -28,7 +28,7 @@
         insert into sys_versions (id, create_time, create_user, status, name, version_name, version_code,
         <if test="remark != null and remark != ''">remark,</if>
         type,package_name,url)
-        values (#{id}, sysdate(), #{createUser}, '0', #{name}, #{versionName}, #{versionCode},
+        values (#{id}, #{createTime}, #{createUser}, '0', #{name}, #{versionName}, #{versionCode},
         <if test="remark != null and remark != ''">#{remark},</if>
         #{type},#{packageName},#{url})
     </insert>
@@ -44,7 +44,7 @@
     </select>
 
     <select id="selectVersionsById" parameterType="Long" resultMap="VersionsResult">
-		select  *
+		select *
 		from sys_versions v
 		where v.id = #{id}
 	</select>

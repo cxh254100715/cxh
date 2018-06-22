@@ -69,13 +69,22 @@ public class MenuServiceImpl implements IMenuService
     @Override
     public Set<String> selectPermsByUserId(Long userId)
     {
-        List<String> perms = menuDao.selectPermsByUserId(userId);
         Set<String> permsSet = new HashSet<>();
-        for (String perm : perms)
-        {
-            if (StringUtils.isNotEmpty(perm))
+        if(userId==1){
+            List<String> permsStr = menuDao.selectAllPerms();
+            for(String str : permsStr){
+                if(StringUtils.isNotEmpty(str)){
+                    permsSet.addAll(Arrays.asList(str));
+                }
+            }
+        }else{
+            List<String> perms = menuDao.selectPermsByUserId(userId);
+            for (String perm : perms)
             {
-                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+                if (StringUtils.isNotEmpty(perm))
+                {
+                    permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+                }
             }
         }
         return permsSet;
@@ -248,11 +257,13 @@ public class MenuServiceImpl implements IMenuService
         if (StringUtils.isNotNull(menuId))
         {
             menu.setUpdateUser(ShiroUtils.getLoginName());
+            menu.setUpdateTime(new Date());
             return menuDao.updateMenu(menu);
         }
         else
         {
             menu.setCreateUser(ShiroUtils.getLoginName());
+            menu.setCreateTime(new Date());
             return menuDao.insertMenu(menu);
         }
     }

@@ -111,10 +111,10 @@ public class MenuController extends BaseController
     @ResponseBody
     public Message save(Menu menu)
     {
-        if (!menuService.checkMenuNameUnique(menu).equals("0"))
+        /*if (!menuService.checkMenuNameUnique(menu).equals("0"))
         {
             return Message.error(1,"菜单名重复！");
-        }
+        }*/
         if (menuService.saveMenu(menu) > 0)
         {
             return Message.ok();

@@ -94,4 +94,6 @@ public interface IMenuDao
      */
     public Menu checkMenuNameUnique(String menuName);
 
+    public List<String> selectAllPerms();
+
 }

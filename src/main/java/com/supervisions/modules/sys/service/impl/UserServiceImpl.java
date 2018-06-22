@@ -83,6 +83,7 @@ public class UserServiceImpl implements IUserService
         if (StringUtils.isNotNull(userId))
         {
             user.setUpdateUser(ShiroUtils.getLoginName());
+            user.setUpdateTime(new Date());
             count = userDao.updateUser(user);
             // 删除用户与角色关联
             userRoleDao.deleteUserRoleByUserId(userId);
@@ -94,6 +95,7 @@ public class UserServiceImpl implements IUserService
             user.randomSalt();
             user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
             user.setCreateUser(ShiroUtils.getLoginName());
+            user.setCreateTime(new Date());
             // 新增用户信息
             count = userDao.insertUser(user);
             // 新增用户与角色管理
@@ -113,6 +115,7 @@ public class UserServiceImpl implements IUserService
     {
         user.randomSalt();
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        user.setUpdateTime(new Date());
         return userDao.updateUser(user);
     }
 
@@ -124,6 +127,7 @@ public class UserServiceImpl implements IUserService
     @Override
     public int updateProfile(User user)
     {
+        user.setUpdateTime(new Date());
         return userDao.updateUser(user);
     }
 

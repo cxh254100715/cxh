@@ -1,6 +1,7 @@
 package com.supervisions.framework.aspectj;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Map;
 
 import com.supervisions.common.constant.UserConstants;
@@ -87,10 +88,10 @@ public class LogAspect
             String ip = ShiroUtils.getIp();
             operLog.setIp(ip);
             operLog.setUrl(ServletUtils.getHttpServletRequest().getRequestURI());
+            operLog.setCreateTime(new Date());
             if (currentUser != null)
             {
                 operLog.setCreateUser(currentUser.getLoginName());
-                //operLog.setDeptName(currentUser.getDept().getName());
             }
 
             if (e != null)

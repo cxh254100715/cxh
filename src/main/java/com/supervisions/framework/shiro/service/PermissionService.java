@@ -1,5 +1,6 @@
 package com.supervisions.framework.shiro.service;
 
+import com.supervisions.common.utils.security.ShiroUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Component;
 

@@ -73,6 +73,7 @@ public class RoleController extends BaseController
     /**
      * 列表
      */
+    @RequiresPermissions("sys:role:list")
     @GetMapping("/list")
     @ResponseBody
     public TableDataInfo list(Role role)

@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="status !=null and status != ''">status = #{status},</if>
 			refuse_des = #{refuseDes},
 			<if test="updateUser != null and updateUser != ''">update_user = #{updateUser},</if>
-			update_time = sysdate()
+			update_time = #{updateTime}
 		</set>
 		where 1=1
 		<if test="id != null and id  != ''">and id = #{id}</if>
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
 			select nextval('user_id');
 		</selectKey>
-		insert into sys_user(
+		insert into sys_user(<trim suffixOverrides=",">
 		<if test="id != null and id != 0">id,</if>
 		<if test="createUser != null and createUser != ''">create_user,</if>
 		<if test="status !=null and status != ''">status,</if>
@@ -85,7 +85,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="salt != null and salt != ''">salt,</if>
 		<if test="refuseDes != null and refuseDes != ''">refuse_des,</if>
 		create_time
-		)values(
+		</trim>
+		)values(<trim suffixOverrides=",">
 		<if test="id != null and id != 0">#{id},</if>
 		<if test="createUser != null and createUser != ''">#{createUser},</if>
 		<if test="status !=null and status != ''">#{status},</if>
@@ -97,7 +98,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="password != null and password != ''">#{password},</if>
 		<if test="salt != null and salt != ''">#{salt},</if>
 		<if test="refuseDes != null and refuseDes != ''">#{refuseDes},</if>
-		sysdate()
+		#{createTime}
+		</trim>
 		)
 	</insert>
 	

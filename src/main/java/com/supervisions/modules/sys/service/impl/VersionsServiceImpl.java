@@ -8,6 +8,7 @@ import com.supervisions.modules.sys.service.IVersionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class VersionsServiceImpl implements IVersionsService
         int count = 0;
         //versions.setName(versions.getVersionName()+versions.getVersionCode());
         versions.setCreateUser(ShiroUtils.getLoginName());
+        versions.setCreateTime(new Date());
         count = versionsDao.insertVersions(versions);
         return count;
     }

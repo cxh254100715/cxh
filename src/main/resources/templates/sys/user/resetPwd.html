@@ -31,6 +31,7 @@
 </form>
 
 <div th:include="include :: footer"></div>
+<script src="/supervisions/js/jQuery.md5.js" th:src="@{/supervisions/js/jQuery.md5.js}"></script>
 <script th:inline="javascript">
     var prefix = ctx + "sys/user";
 
@@ -47,6 +48,7 @@
 
         //监听提交
         form.on('submit(formSubmit)', function (data) {
+            $("input[name='password']").val($.md5($("input[name='password']").val()));
             $.post(prefix + "/resetPwd", $("#user_form").serialize(), function (data) {
                 if (data.code == 0) {
                     parent.layer.msg(data.msg, {icon: 1, time: 5000});

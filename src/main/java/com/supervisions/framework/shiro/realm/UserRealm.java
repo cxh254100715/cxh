@@ -6,6 +6,7 @@ import com.supervisions.framework.shiro.service.LoginService;
 import com.supervisions.modules.sys.mapper.User;
 import com.supervisions.modules.sys.service.impl.MenuServiceImpl;
 import com.supervisions.modules.sys.service.impl.RoleServiceImpl;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -90,6 +91,14 @@ public class UserRealm extends AuthorizingRealm
         }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
         return info;
+    }
+
+    /**
+     * 清理缓存权限
+     */
+    public void clearCachedAuthorizationInfo()
+    {
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 
 }

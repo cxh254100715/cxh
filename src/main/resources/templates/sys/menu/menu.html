@@ -49,15 +49,16 @@
                             {type:'checkbox'},
                             {title:'序号', type:'numbers'},
                             //{field:'id', title:'id', sort:true, align:'center'},
-                            {field:'name', title:'菜单名', sort:true, align:'center'},
+                            {field:'name', title:'菜单名', sort:true, align:'center', templet: function (d) {
+                                    if(d.icon == null || d.icon == "") return d.name; else return "<i class='layui-icon "+ d.icon +"'></i>  " + d.name;
+                                }},
                             {field:'code', title:'编码', sort:true, align:'center'},
                             {field:'orderNo', title:'排序', sort:true, align:'center'},
                             {field:'parentName', title:'父级菜单', sort:true, align:'center'},
                             {field:'url', title:'地址', sort:true, align:'center'},
-                            {field:'icon', title:'图标', sort:true, align:'center'},
-                            //{field:'createTime', title:'创建时间', sort:true, align:'center'},
+                            {field:'createTime', title:'创建时间', sort:true, align:'center'},
                             {field:'type', title:'类型', sort:true, align:'center', templet: function(d){
-                                    if(d.type == 0) return "菜单"; if(d.type == 1) return "功能";
+                                    if(d.type == 0&&d.parentId==0) return "<span class=\"layui-btn layui-btn-sm\">目录</span>"; if(d.type == 0&&d.parentId!=0) return "<span class=\"layui-btn layui-btn-sm layui-btn-normal\">菜单</span>"; if(d.type == 1) return "<span class=\"layui-btn layui-btn-sm layui-btn-warm\">按钮</span>";
                                 }},
                             {field:'status', title:'状态', sort:true, align:'center', templet: function(d){
                                     if(d.status == '0') return "启用"; if(d.status == '1') return "停用";
