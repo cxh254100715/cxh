@@ -4,6 +4,7 @@ import com.supervisions.framework.web.controller.BaseController;
 import com.supervisions.modules.sys.mapper.Menu;
 import com.supervisions.modules.sys.mapper.User;
 import com.supervisions.modules.sys.service.IMenuService;
+import com.supervisions.modules.sys.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ public class IndexController extends BaseController
 {
     @Autowired
     private IMenuService menuService;
+    @Autowired
+    private IUserService userService;
 
 
     // 系统首页
@@ -36,8 +39,10 @@ public class IndexController extends BaseController
         }else{
             menus = menuService.selectMenusByUserId(user.getId());
         }
+        String icon = userService.selectUserById(user.getId()).getIcon();
         model.addAttribute("menus", menus);
         model.addAttribute("user", user);
+        model.addAttribute("icon", icon);
         return "index";
     }
 

@@ -58,4 +58,5 @@ public interface IUserDao
      */
     public int checkUserNameUnique(String loginName);
 
+    public int deleteUserById(Long id);
 }

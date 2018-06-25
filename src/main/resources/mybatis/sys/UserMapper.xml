@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="password"     column="password"     />
 		<result property="salt"         column="salt"         />
 		<result property="refuseDes"    column="refuse_des"   />
+		<result property="icon"			column="icon"		  />
 	</resultMap>
 	
 	<select id="checkUserNameUnique" parameterType="String" resultType="int">
@@ -44,10 +45,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectUserById" parameterType="Long" resultMap="UserResult">
-		select  u.id, u.login_name, u.nick_name, u.email, u.phone, u.sex, u.password, u.salt, u.status, u.refuse_des, u.create_time
+		select  u.id, u.login_name, u.nick_name, u.email, u.phone, u.sex, u.password, u.salt, u.status, u.refuse_des, u.create_time, u.icon
 		from sys_user u
 		where u.id = #{id}
 	</select>
+
+	<delete id="deleteUserById" parameterType="Long">
+ 		delete from sys_user where id = #{id}
+ 	</delete>
 
 	<update id="updateUser" parameterType="User">
 		update sys_user
@@ -62,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="status !=null and status != ''">status = #{status},</if>
 			refuse_des = #{refuseDes},
 			<if test="updateUser != null and updateUser != ''">update_user = #{updateUser},</if>
+			<if test="icon != null and icon != ''">icon = #{icon},</if>
 			update_time = #{updateTime}
 		</set>
 		where 1=1
@@ -84,7 +90,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="password != null and password != ''">password,</if>
 		<if test="salt != null and salt != ''">salt,</if>
 		<if test="refuseDes != null and refuseDes != ''">refuse_des,</if>
-		create_time
+		create_time,
+		icon
 		</trim>
 		)values(<trim suffixOverrides=",">
 		<if test="id != null and id != 0">#{id},</if>
@@ -98,7 +105,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="password != null and password != ''">#{password},</if>
 		<if test="salt != null and salt != ''">#{salt},</if>
 		<if test="refuseDes != null and refuseDes != ''">#{refuseDes},</if>
-		#{createTime}
+		#{createTime},
+		'http://supervisions.cn:8080/img/profile_small.jpg'
 		</trim>
 		)
 	</insert>

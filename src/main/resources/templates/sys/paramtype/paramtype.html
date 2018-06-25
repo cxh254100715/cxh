@@ -85,7 +85,6 @@
                         url: prefix + "/remove/" + data.id,
                         type: "post",
                         dataType: "json",
-                        data: data,
                         success: function(result) {
                             if (result.code == 0) {
                                 layer.msg(result.msg, {icon: 1, time: 5000});

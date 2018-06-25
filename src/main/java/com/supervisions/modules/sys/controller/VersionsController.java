@@ -179,7 +179,7 @@ public class VersionsController extends BaseController
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name",fileName);
-        jsonObject.put("url",CommonConstant.APKURL + category + "/" + versionCode + "/" + fileName);
+        jsonObject.put("url",CommonConstant.APKURL + "file/" + category + "/" + versionCode + "/" + fileName);
         //jsonObject.put("versionCode",mapApk.get("versionCode"));
         //jsonObject.put("packageName",mapApk.get("package"));
         return Message.ok().put("data",jsonObject);

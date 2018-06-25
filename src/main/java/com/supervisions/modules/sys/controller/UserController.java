@@ -1,5 +1,8 @@
 package com.supervisions.modules.sys.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.supervisions.common.constant.CommonConstant;
+import com.supervisions.common.utils.FileUtils;
 import com.supervisions.common.utils.StringUtils;
 import com.supervisions.common.utils.security.ShiroUtils;
 import com.supervisions.framework.aspectj.lang.annotation.Log;
@@ -17,8 +20,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * 用户信息
@@ -43,8 +51,10 @@ public class UserController extends BaseController
      * 用户 页面
      */
     @GetMapping()
-    public String user()
+    public String user(Model model)
     {
+        Long userId = ShiroUtils.getUserId();
+        model.addAttribute("sessionUserId",userId);
         return prefix + "/user";
     }
 
@@ -217,6 +227,50 @@ public class UserController extends BaseController
             return Message.ok();
         }
         return Message.error();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/remove/{id}")
+    @Transactional(rollbackFor=Exception.class)
+    @ResponseBody
+    public Message remove(@PathVariable("id") Long id)
+    {
+        User user = userService.selectUserById(id);
+        if (user == null)
+        {
+            return Message.error("用户不存在");
+        }
+
+        if (userService.deleteUserById(id) > 0)
+        {
+            return Message.ok();
+        }
+        return Message.error();
+    }
+
+    /**
+     * 上传图片
+     */
+    @PostMapping("/upload")
+    @ResponseBody
+    public Message upload(@RequestParam("file") MultipartFile file, HttpServletRequest request)
+    {
+        Map<String,Object> map = new HashMap<>();
+
+        String filePath = CommonConstant.UPLOADURL + "images/profile/";
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        Random random = new Random();
+        Integer randomNum = random.nextInt(9999)%(9999-1000+1) + 1000;
+        String fileName = System.currentTimeMillis() + randomNum.toString() + "." + suffix; // 时间戳+四位随机数
+        try {
+            FileUtils.uploadFile(file.getBytes(), filePath, fileName);
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+        return Message.ok().put("icon",CommonConstant.APKURL + "images/profile/" + fileName);
     }
 
 }

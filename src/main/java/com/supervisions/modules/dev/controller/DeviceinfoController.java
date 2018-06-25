@@ -81,7 +81,7 @@ public class DeviceinfoController extends BaseController
     /**
      * 保存
      */
-    @Log(title = "设备管理", action = "设备管理-保存")
+    @Log(title = "设备管理", action = "设备信息-保存")
     @PostMapping("/save")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
@@ -101,7 +101,7 @@ public class DeviceinfoController extends BaseController
     /**
      * 删除
      */
-    @Log(title = "设备管理", action = "设备管理-删除")
+    @Log(title = "设备管理", action = "设备信息-删除")
     @RequestMapping("/remove/{id}")
     @Transactional(rollbackFor=Exception.class)
     @ResponseBody

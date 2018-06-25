@@ -47,7 +47,7 @@
 		</div>
 	</div>
 
-	<div class="layui-form-item">
+	<div class="layui-form-item" id="divStatus">
 		<label class="layui-form-label">状态:</label>
 		<div class="layui-input-block" style="width:20%">
 			<select id="status" name="status" lay-verify="required">
@@ -57,7 +57,7 @@
 		</div>
 	</div>
 
-	<div class="layui-form-item">
+	<div class="layui-form-item" id="divRole">
 		<label class="layui-form-label">角色:</label>
 		<div class="layui-input-block">
 			<select id="roleId1" name="roleId1" xm-select="select" xm-select-type="2" xm-select-skin="primary" xm-select-search>
@@ -96,6 +96,12 @@
                 ,'登录名必须2到20位'
             ]
         });
+
+        if('[[${user.id}]]'=='1'){
+            $('input[name="loginName"]').attr("readonly","readonly");
+            $('#divStatus').attr("style","display:none;");
+			$('#divRole').remove();
+		}
 
         //监听提交
         form.on('submit(formSubmit)', function(data) {

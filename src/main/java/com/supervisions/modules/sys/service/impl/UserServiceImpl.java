@@ -113,8 +113,10 @@ public class UserServiceImpl implements IUserService
     @Override
     public int resetUserPwd(User user)
     {
+        String password = user.getPassword();
+        user = userDao.selectUserById(user.getId());
         user.randomSalt();
-        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        user.setPassword(passwordService.encryptPassword(user.getLoginName(), password, user.getSalt()));
         user.setUpdateTime(new Date());
         return userDao.updateUser(user);
     }
@@ -177,5 +179,12 @@ public class UserServiceImpl implements IUserService
             }
         }
         return UserConstants.NAME_UNIQUE;
+    }
+
+    @Override
+    public int deleteUserById(Long id)
+    {
+        userRoleDao.deleteUserRoleByUserId(id);
+        return userDao.deleteUserById(id);
     }
 }

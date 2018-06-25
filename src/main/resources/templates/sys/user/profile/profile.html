@@ -55,6 +55,20 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">头像</label>
+                            <div class="layui-input-inline">
+                                <input name="icon" lay-verify="required" readonly id="icon" placeholder="图片地址" th:value="${user.icon}" class="layui-input">
+                            </div>
+                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                <button type="button" class="layui-btn layui-btn-primary" id="uploadFile">
+                                    <i class="layui-icon">&#xe67c;</i>上传图片
+                                </button>
+                                <span class="layui-btn layui-btn-primary" onclick="avartatPreview()">查看图片</span>
+                                <br/><span style="color:red" id="spanUpload"></span>
+                            </div>
+                        </div>
+
 
                         <div class="layui-form-item">
                             <div class="layui-input-block">
@@ -70,9 +84,8 @@
     </div>
 </div>
 
-
-
 <div th:include="include :: footer"></div>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script th:inline="javascript">
     var prefix = ctx + "sys/user";
 
@@ -96,11 +109,51 @@
         renderForm();
     });
 
+    layui.use('upload', function(){
+        var $ = layui.$;
+        var upload = layui.upload;
+        var iii;
+        var uploadInst = upload.render({
+            elem: "#uploadFile",
+            url: prefix + "/upload",
+            accept: 'images',
+            data:{id: function(){return $('#id').val();}},
+            before:function(res){
+                iii = layer.load(1, {shade: [0.1,'#fff']});
+            },
+            done: function(res){
+                layer.close(iii);
+                if(res.code==0){
+                    $('#icon').val(res.icon);
+                    $('#spanUpload').html("上传成功");
+                }else{
+                    $('#spanUpload').html(res.msg);
+                }
+            },
+            error: function(){
+                $('#spanUpload').html("上传异常");
+            }
+        });
+    });
+
     function renderForm(){
         layui.use('form',function(){
             layui.form.render('select');
         });
     }
+
+    function avartatPreview() {
+        var icon = $("#icon").val();
+        layer.open({
+            type: 1,
+            shadeClose: true,
+            fix: false,
+            shade: false,
+            title: false,
+            content: "<img src='"+icon+"' style='width: 200px;height: 200px'></img>"
+        });
+    }
+
 </script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 package com.supervisions.modules.sys.dao;
 
-
 import com.supervisions.modules.sys.mapper.UserRole;
 
 import java.util.List;
@@ -14,10 +13,10 @@ public interface IUserRoleDao
     /**
      * 通过用户ID删除用户和角色关联
      * 
-     * @param userId 用户ID
+     * @param id 用户ID
      * @return 结果
      */
-    public int deleteUserRoleByUserId(Long userId);
+    public int deleteUserRoleByUserId(Long id);
 
     /**
      * 批量删除用户和角色关联

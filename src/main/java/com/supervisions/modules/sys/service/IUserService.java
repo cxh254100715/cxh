@@ -65,4 +65,6 @@ public interface IUserService
      */
     public String checkUserNameUnique(User user);
 
+
+    public int deleteUserById(Long id);
 }

@@ -11,7 +11,7 @@
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
-    <!--<link href="../static/favicon.ico" th:href="@{favicon.ico}" rel="stylesheet"/>-->
+    <link rel="shortcut icon" href="../static/img/favicon.ico" th:href="@{/img/favicon.ico}"/>
     <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
     <link href="../static/css/animate.css" th:href="@{/css/animate.css}" rel="stylesheet"/>
@@ -33,7 +33,7 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element"> <span>
-                         <img src="img/profile_small.jpg" alt="image" class="img-circle" height="60" width="60"/></span>
+                         <img th:attr="src=@{${icon}}" alt="" class="img-circle" height="60" width="60"/></span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                           <span class="clear"><span class="block m-t-xs"><strong class="font-bold">[[${user.loginName}]]</strong></span>
                          <span class="text-muted text-xs block"><span>[[${user.nickName}]]</span> <b class="caret"></b></span> </span> </a>
