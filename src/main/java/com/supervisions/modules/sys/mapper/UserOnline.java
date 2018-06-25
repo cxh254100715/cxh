@@ -15,9 +15,6 @@ public class UserOnline extends PageDomain1
     /** 用户会话id */
     private String sessionId;
 
-    /** 部门名称 */
-    private String deptName;
-
     /** 登录名称 */
     private String loginName;
 
@@ -52,7 +49,6 @@ public class UserOnline extends PageDomain1
     {
         UserOnline online = new UserOnline();
         online.setSessionId(String.valueOf(session.getId()));
-        online.setDeptName(session.getDeptName());
         online.setLoginName(session.getLoginName());
         online.setStartTimestamp(session.getStartTimestamp());
         online.setLastAccessTime(session.getLastAccessTime());
@@ -73,16 +69,6 @@ public class UserOnline extends PageDomain1
     public void setSessionId(String sessionId)
     {
         this.sessionId = sessionId;
-    }
-
-    public String getDeptName()
-    {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName)
-    {
-        this.deptName = deptName;
     }
 
     public String getLoginName()

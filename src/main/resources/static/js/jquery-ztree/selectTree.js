@@ -45,12 +45,13 @@ function initSelectTree(id, isMultiple, chkboxType) {
         }
     });
     var menuTrees = $.fn.zTree.init($("#" + id + "Tree"), setting, zNodes);
+    //menuTrees.expandAll(true);
     //var treeId = "parentTree";
     //$("#" + treeId + "Show").attr("value", "日志管理");
     //$("#" + treeId + "Show").attr("title", "日志管理");
     //$("#" + treeId + "Hide").attr("value", "13");
     //alert($('#parentTreeHide').val());
-    //menuTrees.expandAll(true);
+    //
     //var treeObj = $.fn.zTree.getZTreeObj("tree");
 }
 

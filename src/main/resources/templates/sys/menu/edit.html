@@ -108,6 +108,9 @@
                         $(".layui-nav-tree").find(".layui-nav-itemed").removeClass("layui-nav-itemed")
                     }
                 })
+                var zTree_Menu = $.fn.zTree.getZTreeObj("parentTreeTree");
+                var node = zTree_Menu.getNodeByParam("id",[[${menu.parentId}]],null);
+                zTree_Menu.selectNode(node,true);//指定选中ID的节点
                 $("#parentTreeShow").attr("value", [[${menu.parentName}]]);
                 $("#parentTreeShow").attr("title", [[${menu.parentName}]]);
                 $("#parentTreeHide").attr("value", [[${menu.parentId}]]);

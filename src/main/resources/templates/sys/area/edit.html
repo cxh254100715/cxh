@@ -84,13 +84,15 @@
     var zNodes=[];
     $.get(ctx + "sys/area/areaTreeData", function(data) {
         zNodes = data;
-        //alert(JSON.stringify(zNodes));
         initSelectTree("parentTree", false);
         $(".layui-nav-item a").bind("click", function () {
             if (!$(this).parent().hasClass("layui-nav-itemed") && !$(this).parent().parent().hasClass("layui-nav-child")) {
                 $(".layui-nav-tree").find(".layui-nav-itemed").removeClass("layui-nav-itemed")
             }
         })
+        var zTree_Menu = $.fn.zTree.getZTreeObj("parentTreeTree");
+        var node = zTree_Menu.getNodeByParam("id",[[${area.parentId}]],null);
+        zTree_Menu.selectNode(node,true);//指定选中ID的节点
         $("#parentTreeShow").attr("value", [[${area.parentName}]]);
         $("#parentTreeShow").attr("title", [[${area.parentName}]]);
         $("#parentTreeHide").attr("value", [[${area.parentId}]]);

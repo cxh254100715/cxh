@@ -29,7 +29,7 @@
 
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
-    var editFlag = [[${@permissionService.hasPermi('sys:role:edit')}]];
+    //var editFlag = [[${@permissionService.hasPermi('sys:role:edit')}]];
     var prefix = ctx + "sys/role";
     layui.use('table', function(){
         var $ = layui.$;

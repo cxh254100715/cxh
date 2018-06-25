@@ -17,8 +17,6 @@ public class OperLog extends PageDomain
     private String method;
     /** 来源渠道 */
     private String channel;
-    /** 部门名称 */
-    private String deptName;
     /** 请求url */
     private String url;
     /** 操作地址 */
@@ -58,14 +56,6 @@ public class OperLog extends PageDomain
 
     public void setChannel(String channel) {
         this.channel = channel;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
     }
 
     public String getUrl() {

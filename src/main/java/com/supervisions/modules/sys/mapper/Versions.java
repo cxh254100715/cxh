@@ -17,8 +17,6 @@ public class Versions extends PageDomain {
     private String remark;
     /** 类型 0:Android 1:box */
     private Integer type;
-    /** 包名 */
-    private String packageName;
     /** url */
     private String url;
 
@@ -70,16 +68,6 @@ public class Versions extends PageDomain {
     public void setType(Integer type)
     {
         this.type = type;
-    }
-
-    public String getPackageName()
-    {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName)
-    {
-        this.packageName = packageName;
     }
 
     public String getUrl()

@@ -14,7 +14,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="action"         column="action"        />
 		<result property="method"         column="method"        />
 		<result property="channel"        column="channel"       />
-		<result property="deptName"       column="dept_name"     />
 		<result property="url"        column="url"     />
 		<result property="ip"         column="ip"      />
 		<result property="param"      column="param"    />
@@ -25,8 +24,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
 			select nextval('operlog_id');
 		</selectKey>
-		insert into sys_oper_log(id,title, action, method, channel, create_user, create_time, dept_name, url, ip, param, status, error_msg)
-        values (#{id},#{title}, #{action}, #{method}, #{channel}, #{createUser}, #{createTime}, #{deptName}, #{url}, #{ip}, #{param}, #{status}, #{errorMsg})
+		insert into sys_oper_log(id,title, action, method, channel, create_user, create_time, url, ip, param, status, error_msg)
+        values (#{id},#{title}, #{action}, #{method}, #{channel}, #{createUser}, #{createTime}, #{url}, #{ip}, #{param}, #{status}, #{errorMsg})
 	</insert>
 	
 	<select id="selectOperLogList" parameterType="OperLog" resultMap="OperLogResult">

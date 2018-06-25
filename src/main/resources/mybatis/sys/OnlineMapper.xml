@@ -7,7 +7,6 @@
 	<resultMap type="UserOnline" id="UserOnlineResult">
 		<id     property="sessionId"         column="sessionId"         />
 		<result property="loginName"         column="login_name"        />
-		<result property="deptName"          column="dept_name"         />
 		<result property="ipaddr"            column="ipaddr"            />
 		<result property="browser"           column="browser"           />
 		<result property="os"                column="os"                />
@@ -32,8 +31,8 @@
 	</select>
 
 	<insert id="saveOnline" parameterType="UserOnline">
-		replace into sys_user_online(sessionId, login_name, dept_name, ipaddr, browser, os, status, start_timestamp, last_access_time, expire_time)
-        values (#{sessionId}, #{loginName}, #{deptName}, #{ipaddr}, #{browser}, #{os}, #{status}, #{startTimestamp}, #{lastAccessTime}, #{expireTime})
+		replace into sys_user_online(sessionId, login_name, ipaddr, browser, os, status, start_timestamp, last_access_time, expire_time)
+        values (#{sessionId}, #{loginName}, #{ipaddr}, #{browser}, #{os}, #{status}, #{startTimestamp}, #{lastAccessTime}, #{expireTime})
 	</insert>
 
 	<delete id="deleteOnlineById" parameterType="String">

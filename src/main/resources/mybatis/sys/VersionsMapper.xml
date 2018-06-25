@@ -17,7 +17,6 @@
         <result property="versionCode"          column="version_code"           />
         <result property="remark"         column="remark"          />
         <result property="type"         column="type"          />
-        <result property="packageName"         column="package_name"          />
         <result property="url"         column="url"          />
     </resultMap>
 
@@ -27,10 +26,10 @@
         </selectKey>
         insert into sys_versions (id, create_time, create_user, status, name, version_name, version_code,
         <if test="remark != null and remark != ''">remark,</if>
-        type,package_name,url)
+        type,url)
         values (#{id}, #{createTime}, #{createUser}, '0', #{name}, #{versionName}, #{versionCode},
         <if test="remark != null and remark != ''">#{remark},</if>
-        #{type},#{packageName},#{url})
+        #{type},#{url})
     </insert>
 
     <select id="selectVersionsList" parameterType="Versions" resultMap="VersionsResult">
