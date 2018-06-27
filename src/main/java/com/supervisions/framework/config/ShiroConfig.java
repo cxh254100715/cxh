@@ -201,6 +201,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/supervisions/**", "anon");
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/file/**", "anon");
+        filterChainDefinitionMap.put("/images/**", "anon");
         // 不需要拦截的访问
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/api/**", "anon");

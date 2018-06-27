@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+<link href="http://www.layui.com/admin/std/dist/layuiadmin/style/admin.css" th:href="@{http://www.layui.com/admin/std/dist/layuiadmin/style/admin.css}" rel="stylesheet"/>
+<link href="http://www.layui.com/admin/std/dist/layuiadmin/style/template.css" th:href="@{http://www.layui.com/admin/std/dist/layuiadmin/style/template.css}" rel="stylesheet"/>
+
+<body>
+<div class="layui-fluid layadmin-cmdlist-fluid">
+    <div class="test-table-reload-btn" style="margin-bottom: 10px;">
+        <button class="layui-btn" data-type="reload" id="add">新增</button>
+    </div>
+    <div class="layui-row layui-col-space30" id="layuiDiv">
+
+    </div>
+
+    <div class="layui-col-md12 layui-col-sm12" style="">
+        <div id="demo0"></div>
+    </div>
+</div>
+<input type="hidden" id="count"/>
+
+<div th:include="include :: footer"></div>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "ten/picture";
+
+    layui.use(['laypage', 'layer'], function(){
+        var $ = layui.$;
+        var laypage = layui.laypage
+            ,layer = layui.layer;
+
+        flushPage();
+        function flushPage(page,limit) {
+            limit = 12;
+            if (page == ""||typeof(page) == "undefined") {
+                page = 1;
+            } else {
+                page = page;
+            }
+            $.get(prefix + '/list?page=' + page + '&limit=' + limit, function (data) {
+                count = data.count;
+                initData(data.data);
+                pagesList(count,limit,page);
+            });
+        }
+
+        function pagesList(count,limit,page) {
+            laypage.render({
+                elem: 'demo0',
+                count: count, //数据总数
+                limit: limit,
+                skip: true,
+                curr: location.hash.replace('#!page=', ''), //获取起始页
+                hash: 'page', //自定义hash值
+                jump: function(obj, first){
+                    //首次不执行
+                    if(!first){
+                        $("#layuiDiv").empty();
+                        flushPage(obj.curr,obj.limit);
+                    }
+                }
+            });
+        }
+
+        // 新增
+        $('#add').on('click', function(){
+            var url = prefix + '/add';
+            layer.open({
+                type: 2,
+                area: ['40%', '90%'],
+                fix: false,
+                maxmin: true,
+                shade: 0.4,
+                title: "新增",
+                content: url
+            });
+        });
+
+    });
+
+    // 编辑
+    function edit(id){
+        var url = prefix + '/edit/'+ id;
+        layer.open({
+            type: 2,
+            area: ['40%', '90%'],
+            fix: false,
+            maxmin: true,
+            shade: 0.4,
+            title: "编辑",
+            content: url
+        });
+    }
+
+    // 编辑
+    function del(id){
+        layer.confirm("确定要删除选中的数据吗？", {
+            icon: 3,
+            title: "系统提示",
+            btn: ['确认', '取消'],
+            btnclass: ['btn btn-primary', 'btn btn-danger'],
+        }, function () {
+            $.ajax({
+                url: prefix + "/remove/" + id,
+                type: "post",
+                dataType: "json",
+                success: function(result) {
+                    if (result.code == 0) {
+                        layer.msg(result.msg, {icon: 1, time: 5000});
+                        location.reload();
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 5000});
+                    }
+                }
+            });
+        });
+    }
+
+    function initData(data){
+        for(var i=0; i<data.length; i++){
+            $("#layuiDiv").append($('<div class="layui-col-sm4 layui-col-md2">\n' +
+                '            <div class="cmdlist-container">\n' +
+                '                <a href="javascript:void(0);" onclick="avartatPreview(\''+data[i].url+'\')">\n' +
+                '                    <img src="'+data[i].url+'" style="">\n' +
+                '                </a>\n' +
+                '                <div class="cmdlist-text">\n' +
+                '                    <div class="price">\n' +
+                '                        <b>头像</b>\n' +
+                '                        <p>排序:'+data[i].orderNo+'</p>\n' +
+                '                        <p style="float:right">\n' +
+                '                            <a class="layui-btn layui-btn-xs" href="javascript:void(0);" onclick="edit('+data[i].id+')">编辑</a>\n' +
+                '                            <a class="layui-btn layui-btn-danger layui-btn-xs" href="javascript:void(0);" onclick="del('+data[i].id+')">删除</a>\n' +
+                '                        </p>\n' +
+                '                    </div>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '        </div>'));
+        }
+    }
+
+    function avartatPreview(url) {
+        layer.open({
+            type: 1,
+            area: ['400px', '400px'],
+            shadeClose: true,
+            fix: false,
+            shade: true,
+            title: false,
+            content: "<img src='"+url+"' style='width: 400px;height: 400px'></img>"
+        });
+    }
+
+</script>
+
+</body>
+</html>

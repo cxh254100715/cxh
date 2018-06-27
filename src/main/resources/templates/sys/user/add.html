@@ -64,7 +64,7 @@
 		</div>
 	</div>
 
-	<div class="layui-form-item">
+	<div class="layui-form-item" style="padding-bottom: 64px">
 		<label class="layui-form-label">角色:</label>
 		<div class="layui-input-block" style="">
 			<select id="roleIds1" name="roleIds1" xm-select="select" xm-select-type="2" xm-select-skin="primary" xm-select-search>
@@ -73,12 +73,21 @@
 		</div>
 	</div>
 
-	<div class="layui-form-item">
+	<!--<div class="layui-form-item">
 		<div class="layui-input-block">
 			<button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
 			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 		</div>
+	</div>-->
+	<div class="layui-form-item" style="height: 64px; width: 100%;background-color: white;position: fixed;bottom: 0;margin-bottom: 0;">
+		<div class="layui-input-block">
+			<div class="layui-footer" style="left: 0;padding: 13px 0;box-shadow: 0 -1px 2px 0 rgba(0,0,0,.05);">
+				<button class="layui-btn" lay-submit="" lay-filter="formSubmit">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
 	</div>
+
 </form>
 
 <div th:include="include :: footer"></div>

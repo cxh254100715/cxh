@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body>
+<form class="layui-form layui-form-pane" action="" id="picture_form" style="margin-left:20px;margin-top:20px;margin-right:20px">
+    <input type="hidden" id="id" name="id" th:value="${picture.id}"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序:</label>
+        <div class="layui-input-block">
+            <input type="text" name="orderNo" th:value="${picture.orderNo}" placeholder="请输入排序" autocomplete="off" class="layui-input" style="width: 190px">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态:</label>
+        <div class="layui-input-block" style="width:190px">
+            <select id="status" name="status" lay-verify="required">
+                <option value="0">启用</option>
+                <option value="1">停用</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型:</label>
+        <div class="layui-input-block" style="width:190px">
+            <select id="type" name="type" lay-verify="required">
+                <option value="0">头像</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片</label>
+        <div class="layui-input-inline">
+            <input name="url" lay-verify="required" readonly id="url" placeholder="图片地址" th:value="${picture.url}" class="layui-input">
+        </div>
+        <div class="layui-input-inline layui-btn-container" style="width: auto;">
+            <button type="button" class="layui-btn layui-btn-primary" id="uploadFile">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+            <span class="layui-btn layui-btn-primary" onclick="avartatPreview()">查看图片</span>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div th:include="include :: footer"></div>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "ten/picture";
+    layui.use('form', function () {
+        var $ = layui.$;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            $.post(prefix + "/save", $('#picture_form').serialize(), function (data) {
+                if (data.code == 0) {
+                    parent.location.reload();
+                    parent.layer.msg(data.msg, {icon: 1, time: 5000});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.msg, {icon: 2, time: 5000});
+                }
+            }, 'json');
+            return false;
+        });
+        $("#status").val([[${picture.status}]]);
+        $("#type").val([[${picture.type}]]);
+        renderForm();
+    });
+
+    layui.use('upload', function(){
+        var $ = layui.$;
+        var upload = layui.upload;
+        var iii;
+        var uploadInst = upload.render({
+            elem: "#uploadFile",
+            url: prefix + "/upload",
+            accept: 'images',
+            //data:{id: function(){return $('#id').val();}},
+            before:function(res){
+                iii = layer.load(1, {shade: [0.1,'#fff']});
+            },
+            done: function(res){
+                layer.close(iii);
+                if(res.code==0){
+                    $('#url').val(res.url);
+                    layer.msg("上传成功！",{icon:1,time:5000});
+                }else{
+                    layer.msg(res.msg,{icon:1,time:5000});
+                }
+            },
+            error: function(){
+                layer.msg("上传异常！",{icon:1,time:5000});
+            }
+        });
+    });
+
+    function avartatPreview() {
+        var url = $("#url").val();
+        layer.open({
+            type: 1,
+            area: ['300px', '300px'],
+            shadeClose: false,
+            fix: false,
+            shade: false,
+            title: false,
+            content: "<img src='"+url+"' style='width: 300px;height: 300px'></img>"
+        });
+    }
+
+    function renderForm() {
+        layui.use('form', function () {
+            layui.form.render('select');
+        });
+    }
+</script>
+</body>
+</html>

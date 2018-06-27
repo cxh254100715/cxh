@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 
 <head th:include="include :: header"></head>
-<link href="/supervisions/css/admin.css" th:href="@{/supervisions/css/admin.css}" rel="stylesheet"/>
+
 <body>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
@@ -65,10 +65,8 @@
                                     <i class="layui-icon">&#xe67c;</i>上传图片
                                 </button>
                                 <span class="layui-btn layui-btn-primary" onclick="avartatPreview()">查看图片</span>
-                                <br/><span style="color:red" id="spanUpload"></span>
                             </div>
                         </div>
-
 
                         <div class="layui-form-item">
                             <div class="layui-input-block">
@@ -117,7 +115,7 @@
             elem: "#uploadFile",
             url: prefix + "/upload",
             accept: 'images',
-            data:{id: function(){return $('#id').val();}},
+            //data:{id: function(){return $('#id').val();}},
             before:function(res){
                 iii = layer.load(1, {shade: [0.1,'#fff']});
             },
@@ -125,13 +123,13 @@
                 layer.close(iii);
                 if(res.code==0){
                     $('#icon').val(res.icon);
-                    $('#spanUpload').html("上传成功");
+                    layer.msg("上传成功！",{icon:1,time:5000});
                 }else{
-                    $('#spanUpload').html(res.msg);
+                    layer.msg(res.msg,{icon:1,time:5000});
                 }
             },
             error: function(){
-                $('#spanUpload').html("上传异常");
+                layer.msg("上传异常！",{icon:1,time:5000});
             }
         });
     });
@@ -146,7 +144,8 @@
         var icon = $("#icon").val();
         layer.open({
             type: 1,
-            shadeClose: true,
+            area: ['200px', '200px'],
+            shadeClose: false,
             fix: false,
             shade: false,
             title: false,

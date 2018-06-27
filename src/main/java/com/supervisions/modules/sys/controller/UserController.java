@@ -255,11 +255,9 @@ public class UserController extends BaseController
      */
     @PostMapping("/upload")
     @ResponseBody
-    public Message upload(@RequestParam("file") MultipartFile file, HttpServletRequest request)
+    public Message upload(@RequestParam("file") MultipartFile file)
     {
-        Map<String,Object> map = new HashMap<>();
-
-        String filePath = CommonConstant.UPLOADURL + "images/profile/";
+        String filePath = CommonConstant.UPLOADURL + "images/profile/pc/";
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         Random random = new Random();
         Integer randomNum = random.nextInt(9999)%(9999-1000+1) + 1000;
@@ -270,7 +268,7 @@ public class UserController extends BaseController
             e.getMessage();
         }
 
-        return Message.ok().put("icon",CommonConstant.APKURL + "images/profile/" + fileName);
+        return Message.ok().put("icon",CommonConstant.APKURL + "images/profile/pc/" + fileName);
     }
 
 }
