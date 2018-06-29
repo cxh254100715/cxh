@@ -268,7 +268,7 @@ public class UserController extends BaseController
             e.getMessage();
         }
 
-        return Message.ok().put("icon",CommonConstant.APKURL + "images/profile/pc/" + fileName);
+        return Message.ok().put("icon",CommonConstant.UPLOADHEADURL + "images/profile/pc/" + fileName);
     }
 
 }

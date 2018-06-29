@@ -87,7 +87,7 @@ public class TenPictureController extends BaseController
         if(StringUtils.isEmpty(picture.getUrl())){
             return Message.error("请上传图片！");
         }
-        if (tenPictureService.savePicture(picture) > 0)
+        if (tenPictureService.savePicture(picture) != null)
         {
             return Message.ok();
         }
@@ -107,7 +107,7 @@ public class TenPictureController extends BaseController
         {
             return Message.error("数据不存在");
         }
-        if (tenPictureService.deleteTenPictureById(id) > 0)
+        if (tenPictureService.deleteTenPictureById(id) != null)
         {
             if(picture.getUrl().indexOf("images/profile/app/")==-1){
                 throw new Exception("数据异常");
@@ -138,7 +138,7 @@ public class TenPictureController extends BaseController
             e.getMessage();
         }
 
-        return Message.ok().put("url",CommonConstant.APKURL + "images/profile/app/" + fileName);
+        return Message.ok().put("url",CommonConstant.UPLOADHEADURL + "images/profile/app/" + fileName);
     }
 
 }

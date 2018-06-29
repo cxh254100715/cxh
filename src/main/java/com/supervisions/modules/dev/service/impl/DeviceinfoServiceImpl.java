@@ -59,6 +59,7 @@ public class DeviceinfoServiceImpl implements IDeviceinfoService
         }
         else
         {
+            deviceinfo.setIsActivated(0);
             deviceinfo.setCreateUser(ShiroUtils.getLoginName());
             deviceinfo.setCreateTime(new Date());
             count = deviceinfoDao.insertDeviceinfo(deviceinfo);

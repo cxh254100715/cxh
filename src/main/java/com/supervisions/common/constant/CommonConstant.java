@@ -43,9 +43,11 @@ public class CommonConstant
     public static String PACKSGE = "com.foundersvision.jason.snookertv";
 
     /**
-     * 域名
+     * 上传文件地址
      */
-    public static String APKURL = "http://supervisions.cn:8080/";
+    public static String UPLOADHEADURL = "http://supervisions.cn:8080/";
+    // 测试
+    //public static String UPLOADHEADURL = "http://47.106.192.7/upload/";
 
     /**
      * apk上传地址

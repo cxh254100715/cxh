@@ -21,11 +21,11 @@ public interface ITenPictureDao
 
     public TenPicture selectTenPictureById(Long id);
 
-    public int savePicture(TenPicture picture);
-
     public int updatePicture(TenPicture picture);
 
     public int insertPicture(TenPicture picture);
 
     public int deleteTenPictureById(Long id);
+
+    public List<Map<String,Object>> selectTenPictureByType(Integer type);
 }

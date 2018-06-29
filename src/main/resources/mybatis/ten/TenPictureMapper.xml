@@ -27,6 +27,10 @@
 		where p.id = #{id}
 	</select>
 
+    <select id="selectTenPictureByType" parameterType="Integer" resultType="java.util.HashMap">
+        select order_no orderNo, url from ten_picture where type = #{type} order by order_no
+	</select>
+
     <delete id="deleteTenPictureById" parameterType="Long">
  		delete from ten_picture where id = #{id}
  	</delete>

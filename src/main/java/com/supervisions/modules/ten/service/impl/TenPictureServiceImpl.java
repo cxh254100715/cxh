@@ -2,11 +2,14 @@ package com.supervisions.modules.ten.service.impl;
 
 import com.supervisions.common.utils.StringUtils;
 import com.supervisions.common.utils.security.ShiroUtils;
-import com.supervisions.modules.sys.mapper.Area;
 import com.supervisions.modules.ten.dao.ITenPictureDao;
 import com.supervisions.modules.ten.mapper.TenPicture;
 import com.supervisions.modules.ten.service.ITenPictureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,6 +20,7 @@ import java.util.Map;
  * TenPicture 业务层处理
  */
 @Service("tenPictureService")
+@CacheConfig(cacheNames="tenPicture")
 public class TenPictureServiceImpl implements ITenPictureService
 {
     @Autowired
@@ -35,7 +39,8 @@ public class TenPictureServiceImpl implements ITenPictureService
     }
 
     @Override
-    public int savePicture(TenPicture picture)
+    @CachePut(key = "'pictureList:list'")
+    public List<Map<String, Object>> savePicture(TenPicture picture)
     {
         int count = 0;
         Long id = picture.getId();
@@ -57,12 +62,21 @@ public class TenPictureServiceImpl implements ITenPictureService
             }
             count = tenPictureDao.insertPicture(picture);
         }
-        return count;
+        if(count>0){
+            return tenPictureDao.selectTenPictureByType(0);
+        }
+        return null;
     }
 
     @Override
-    public int deleteTenPictureById(Long id)
+    //@CacheEvict(key = "'pictureList:list'")
+    @CachePut(key = "'pictureList:list'")
+    public List<Map<String, Object>> deleteTenPictureById(Long id)
     {
-        return tenPictureDao.deleteTenPictureById(id);
+        int count = tenPictureDao.deleteTenPictureById(id);
+        if(count>0){
+            return tenPictureDao.selectTenPictureByType(0);
+        }
+        return null;
     }
 }

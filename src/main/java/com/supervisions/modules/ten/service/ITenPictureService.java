@@ -18,7 +18,7 @@ public interface ITenPictureService
 
     public TenPicture selectTenPictureById(Long id);
 
-    public int savePicture(TenPicture picture);
+    public List<Map<String, Object>> savePicture(TenPicture picture);
 
-    public int deleteTenPictureById(Long id);
+    public List<Map<String, Object>> deleteTenPictureById(Long id);
 }
