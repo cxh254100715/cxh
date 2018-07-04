@@ -10,10 +10,21 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><span style="color:red">*  </span>序列号:</label>
         <div class="layui-input-block">
-            <input type="text" name="serialNumber" required lay-verify="required" placeholder="请输入序列号" autocomplete="off" class="layui-input">
+            <input type="text" name="deviceSn" required lay-verify="required" placeholder="请输入序列号" autocomplete="off" class="layui-input">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>设备ID:</label>
+        <div class="layui-input-block">
+            <input type="text" name="deviceUnique" required lay-verify="required" placeholder="请输入设备ID" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>公钥:</label>
+        <div class="layui-input-block">
+            <input type="text" name="devicePublickey" required lay-verify="required" placeholder="请输入公钥" autocomplete="off" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">类型:</label>
         <div class="layui-input-block" style="width:20%">
@@ -26,7 +37,7 @@
     </div>
     
     <div class="layui-form-item">
-        <label class="layui-form-label">设备名:</label>
+        <label class="layui-form-label"><span style="color:red">*  </span>设备名称:</label>
         <div class="layui-input-block">
             <select id="deviceId" name="deviceId" lay-verify="required">
             </select>
@@ -34,7 +45,7 @@
     </div>
     
     <div class="layui-form-item">
-        <label class="layui-form-label">客户:</label>
+        <label class="layui-form-label"><span style="color:red">*  </span>客户:</label>
         <div class="layui-input-block">
             <select id="merchantId" name="merchantId" lay-verify="required" lay-filter="merchant">
                 <option value="">请选择...</option>
@@ -44,7 +55,7 @@
     </div>
     
     <div class="layui-form-item">
-        <label class="layui-form-label">客户地址:</label>
+        <label class="layui-form-label"><span style="color:red">*  </span>客户地址:</label>
         <div class="layui-input-block">
             <select id="merchantAddressId" name="merchantAddressId" lay-verify="required">
 

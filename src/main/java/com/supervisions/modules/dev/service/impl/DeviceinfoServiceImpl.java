@@ -38,7 +38,7 @@ public class DeviceinfoServiceImpl implements IDeviceinfoService
     public String checkNameUnique(Deviceinfo deviceinfo)
     {
         Long id = deviceinfo.getId();
-        Deviceinfo info = deviceinfoDao.checkNameUnique(deviceinfo.getSerialNumber());
+        Deviceinfo info = deviceinfoDao.checkNameUnique(deviceinfo.getDeviceSn());
         if (StringUtils.isNotNull(info) && StringUtils.isNotNull(info.getId()) && !info.getId().equals(id))
         {
             return UserConstants.NAME_NOT_UNIQUE;

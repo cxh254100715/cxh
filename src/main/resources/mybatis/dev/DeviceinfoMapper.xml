@@ -12,7 +12,7 @@
         <result property="updateUser"	column="update_user"	/>
         <result property="status"	column="status"	/>
         <result property="version"	column="version"	/>
-		<result property="serialNumber"	column="serial_number"	/>
+        <result property="deviceSn"	column="device_sn"	/>
         <result property="type"	column="type"	/>
         <result property="deviceId"	column="device_id"	/>
         <result property="merchantId"	column="merchant_id"	/>
@@ -20,14 +20,16 @@
         <result property="lonLat"	column="lon_lat"	/>
         <result property="isActivated"	column="is_activated"	/>
         <result property="remark"	column="remark"	/>
+        <result property="deviceUnique"	column="device_unique"	/>
+        <result property="devicePublickey"	column="device_publickey"	/>
         </resultMap>
 
     <select id="selectDeviceinfoList" parameterType="Deviceinfo" resultMap="DeviceinfoResult">
-        select *, (select d.name from dev_device d where d.id = device_id) deviceName, (select m.name from mer_merchant m where m.id = merchant_id) merchantName, (select ma.name from mer_merchant_address ma where ma.id = merchant_address_id) merchantAddressName from dev_device_info
+        select id,create_time,create_user,status,version,device_sn,type,is_activated,remark,device_id,merchant_id,merchant_address_id, (select d.name from dev_device d where d.id = device_id) deviceName, (select m.name from mer_merchant m where m.id = merchant_id) merchantName, (select ma.name from mer_merchant_address ma where ma.id = merchant_address_id) merchantAddressName from dev_device_info
         <where>
             <if test="searchValue != null and searchValue != ''">
                 <bind name="bindSearchValue" value="'%' + searchValue + '%'" />
-                AND CONCAT(serial_number) LIKE #{bindSearchValue}
+                AND CONCAT(device_sn) LIKE #{bindSearchValue}
             </if>
         </where>
     </select>
@@ -40,7 +42,7 @@
 
     <select id="checkNameUnique" parameterType="String" resultMap="DeviceinfoResult">
 		select *
-		from dev_device_info where serial_number=#{serialNumber}
+		from dev_device_info where device_sn=#{deviceSn}
 	</select>
 
     <delete id="deleteDeviceinfoById" parameterType="Long">
@@ -53,7 +55,7 @@
             update_time = #{updateTime},
             update_user = #{updateUser},
             status = #{status},
-			serial_number = #{serialNumber},
+            device_sn = #{deviceSn},
 			type = #{type},
 			device_id = #{deviceId},
 			merchant_id = #{merchantId},
@@ -75,28 +77,32 @@
         create_time,
         create_user,
         status,
-		serial_number,
+        device_sn,
         type,
         device_id,
         merchant_id,
         merchant_address_id,
         lon_lat,
         is_activated,
-        remark
+        remark,
+        device_unique,
+        device_publickey
         </trim>
         )values(<trim suffixOverrides=",">
         #{id},
         #{createTime},
         #{createUser},
         #{status},
-		#{serialNumber},
+		#{deviceSn},
         #{type},
         #{deviceId},
         #{merchantId},
         #{merchantAddressId},
         #{lonLat},
         #{isActivated},
-        #{remark}
+        #{remark},
+        #{deviceUnique},
+        #{devicePublickey}
         </trim>
         )
     </insert>
