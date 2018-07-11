@@ -118,9 +118,9 @@ public class VersionsController extends BaseController
         if (versionsService.deleteVersionsById(id) > 0)
         {
             String category = "";
-            if(versions.getType()==0){
+            if(versions.getType()==1){
                 category = "android";
-            }else if(versions.getType()==1){
+            }else if(versions.getType()==0){
                 category = "box";
             }
             String filePath = CommonConstant.UPLOADURL + "file//"+category+"//"+versions.getVersionCode()+"//";
@@ -163,9 +163,9 @@ public class VersionsController extends BaseController
         }*/
 
         String category = "";
-        if(type==0){
+        if(type==1){
             category = "android";
-        }else if(type==1){
+        }else if(type==0){
             category = "box";
         }
         //String filePath = parentPath+"//ROOT//file//" + category + "//" + versionCode + "//";

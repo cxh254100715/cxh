@@ -43,6 +43,6 @@ public interface IDeviceinfoService
      * @param id
      * @return
      */
-    public int deleteDeviceinfoById(Long id);
+    public int deleteDeviceinfoById(Long id,Integer type);
 
 }

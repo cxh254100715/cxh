@@ -49,7 +49,7 @@
                     {type:'checkbox'},
                     {title:'序号', type:'numbers'},
 					{field:'deviceSn', title:'序列号', sort:true, align:'center'},
-                    {field:'deviceName', title:'设备名', sort:true, align:'center'},
+                    {field:'deviceName', title:'设备名', sort:false, align:'center'},
 					{field:'type', title:'类型', sort:true, align:'center', templet: function(d){
                             if(d.type == 0) return "工控机"; if(d.type == 1) return "电视"; if(d.type == 2) return "摄像头";
                         }},
@@ -57,6 +57,9 @@
 					{field:'merchantAddressName', title:'客户地址', sort:false, align:'center'},
 					{field:'isActivated', title:'是否激活', sort:true, align:'center', templet: function(d){
                             if(d.isActivated == 0) return "未激活"; if(d.isActivated == 1) return "已激活";
+                        }},
+                    {field:'status', title:'状态', sort:true, align:'center', templet: function(d){
+                            if(d.status == 0) return "在线"; if(d.status == 1) return "离线";
                         }},
 					{field:'remark', title:'备注', sort:true, align:'center'},
 					{fixed:'right', title:'操作', width:120, align:'center', toolbar:'#toolbar'}
@@ -73,9 +76,15 @@
         table.on('tool(filtertable)', function(obj){
             var data = obj.data;
             if(obj.event === 'edit'){
+                if(data.isActivated != 0){
+                    return false;
+                }
                 edit(data.id);
             };
             if(obj.event === 'del'){
+                if(data.isActivated != 0){
+                    return false;
+                }
                 layer.confirm("确定要删除选中的数据吗？", {
                     icon: 3,
                     title: "系统提示",
@@ -145,8 +154,14 @@
 </script>
 
 <script type="text/html" id="toolbar">
-    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  if(d.isActivated == 0){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled" lay-event="del">删除</a>
+    {{#  } }}
+
 </script>
 </body>
 </html>

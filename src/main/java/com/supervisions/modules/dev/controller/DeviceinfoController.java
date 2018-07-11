@@ -1,5 +1,6 @@
 package com.supervisions.modules.dev.controller;
 
+import com.supervisions.common.constant.UserConstants;
 import com.supervisions.framework.aspectj.lang.annotation.Log;
 import com.supervisions.framework.web.controller.BaseController;
 import com.supervisions.framework.web.domain.Message;
@@ -87,7 +88,7 @@ public class DeviceinfoController extends BaseController
     @ResponseBody
     public Message save(Deviceinfo deviceinfo)
     {
-        if (!deviceinfoService.checkNameUnique(deviceinfo).equals("0"))
+        if (!deviceinfoService.checkNameUnique(deviceinfo).equals(UserConstants.NAME_UNIQUE))
         {
             return Message.error(1,"序列号重复！");
         }
@@ -112,7 +113,7 @@ public class DeviceinfoController extends BaseController
         {
             return Message.error("数据不存在！");
         }
-        if (deviceinfoService.deleteDeviceinfoById(id) > 0)
+        if (deviceinfoService.deleteDeviceinfoById(id,deviceinfo.getType()) > 0)
         {
             return Message.ok();
         }

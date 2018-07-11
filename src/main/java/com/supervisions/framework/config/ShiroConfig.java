@@ -204,7 +204,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/images/**", "anon");
         // 不需要拦截的访问
         filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/api/**", "anon");
+        filterChainDefinitionMap.put("/swagger-ui.html/**", "anon");
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 系统权限列表

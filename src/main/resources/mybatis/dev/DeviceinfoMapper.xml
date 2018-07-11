@@ -54,15 +54,15 @@
         <set>
             update_time = #{updateTime},
             update_user = #{updateUser},
-            status = #{status},
             device_sn = #{deviceSn},
 			type = #{type},
 			device_id = #{deviceId},
 			merchant_id = #{merchantId},
 			merchant_address_id = #{merchantAddressId},
 			lon_lat = #{lonLat},
-			is_activated = #{isActivated},
-			remark = #{remark}
+			remark = #{remark},
+            device_unique = #{deviceUnique},
+            device_publickey = #{devicePublickey}
 			</set>
         where 1=1
         and id = #{id}

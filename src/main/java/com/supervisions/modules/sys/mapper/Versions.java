@@ -15,7 +15,7 @@ public class Versions extends PageDomain {
     private String versionCode;
     /** 备注 */
     private String remark;
-    /** 类型 0:Android 1:box */
+    /** 类型 0:box 1:android */
     private Integer type;
     /** url */
     private String url;

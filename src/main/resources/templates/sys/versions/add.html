@@ -12,8 +12,8 @@
         <label class="layui-form-label">类型:</label>
         <div class="layui-input-block" style="width:20%">
             <select id="type" name="type" lay-verify="required">
-                <option value="0">安卓</option>
-                <option value="1">工控机</option>
+                <option value="1">安卓</option>
+                <option value="0">工控机</option>
             </select>
         </div>
     </div>
@@ -108,11 +108,13 @@
                     renderForm();
                     $('#spanUpload').html("上传成功");
                 }else{
+                    layer.close(iii);
                     $('#spanUpload').html(res.msg);
                 }
 
             },
             error: function(){
+                layer.close(iii);
                 $('#spanUpload').html("上传异常");
             }
         });

@@ -45,12 +45,12 @@ public class CommonConstant
     /**
      * 上传文件地址
      */
-    public static String UPLOADHEADURL = "http://supervisions.cn:8080/";
+    public static String UPLOADHEADURL = "http://supervisions.cn/supervisions_backstage/";
     // 测试
-    //public static String UPLOADHEADURL = "http://47.106.192.7/upload/";
+    //public static String UPLOADHEADURL = "http://47.106.192.7/supervisions_backstage/";
 
     /**
-     * apk上传地址
+     * 文件上传地址
      */
     public static String UPLOADURL = "/myfile/upload/";
 }

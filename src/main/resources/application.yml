@@ -2,10 +2,10 @@
 web:
   upload-path: /myfile/upload/
   #front-path: d:/myfile/front/
-
 server:
   #\u7AEF\u53E3
   port: 8080
+  context-path: /supervisions_backstage
   tomcat:
     uri-encoding: utf-8
 #日志配置
@@ -26,8 +26,10 @@ spring:
     cache: false
 
   redis:
-    # Redis服务器地址
+    # Redis服务器地址(localhost)
     host: localhost
+    # Redis服务器地址(docker)
+    #host: redis
     # Redis服务器连接密码（默认为空）
     password: 123456
     # Redis服务器连接端口

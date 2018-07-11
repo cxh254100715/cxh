@@ -8,7 +8,6 @@ import com.supervisions.framework.web.page.TableDataInfo;
 import com.supervisions.modules.dev.mapper.Device;
 import com.supervisions.modules.dev.service.IDeviceService;
 import com.supervisions.modules.sys.mapper.Paramdata;
-import com.supervisions.modules.sys.mapper.Paramtype;
 import com.supervisions.modules.sys.service.IParamdataService;
 import com.supervisions.modules.sys.service.IParamtypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * device
@@ -74,7 +71,7 @@ public class DeviceController extends BaseController
      */
     @GetMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Device device)
+    public TableDataInfo list(Device device,String lalala)
     {
         setPageInfo(device);
         List<Device> list = deviceService.selectDeviceList(device);

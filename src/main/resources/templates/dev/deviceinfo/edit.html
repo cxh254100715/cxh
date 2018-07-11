@@ -9,9 +9,21 @@
     <input type="hidden" id="id" name="id" th:value="${deviceinfo.id}"/>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">序列号:</label>
+        <label class="layui-form-label"><span style="color:red">*  </span>序列号:</label>
         <div class="layui-input-block">
-            <input type="text" name="serialNumber" th:value="${deviceinfo.serialNumber}" placeholder="请输入序列号" autocomplete="off" class="layui-input">
+            <input type="text" name="deviceSn" th:value="${deviceinfo.deviceSn}" required lay-verify="required" placeholder="请输入序列号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>设备ID:</label>
+        <div class="layui-input-block">
+            <input type="text" name="deviceUnique" th:value="${deviceinfo.deviceUnique}" required lay-verify="required" placeholder="请输入设备ID" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red">*  </span>公钥:</label>
+        <div class="layui-input-block">
+            <input type="text" name="devicePublickey" th:value="${deviceinfo.devicePublickey}" required lay-verify="required" placeholder="请输入公钥" autocomplete="off" class="layui-input">
         </div>
     </div>
 
@@ -27,7 +39,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">设备名:</label>
+        <label class="layui-form-label">设备名称:</label>
         <div class="layui-input-block">
             <select id="deviceId" name="deviceId" lay-verify="required">
             </select>
@@ -48,17 +60,6 @@
         <label class="layui-form-label">客户地址:</label>
         <div class="layui-input-block">
             <select id="merchantAddressId" name="merchantAddressId" lay-verify="required">
-
-            </select>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">是否激活:</label>
-        <div class="layui-input-block" style="width:20%">
-            <select id="isActivated" name="isActivated" lay-verify="required">
-                <option value="0">未激活</option>
-                <option value="1">已激活</option>
             </select>
         </div>
     </div>
@@ -66,7 +67,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">备注:</label>
         <div class="layui-input-block">
-            <input type="text" name="remark" th:value="${deviceinfo.remark}" placeholder="请输入备注" autocomplete="off" class="layui-input">
+            <textarea id="remark" name="remark" th:value="${deviceinfo.remark}" placeholder="请输入备注" class="layui-textarea"></textarea>
         </div>
     </div>
     
@@ -110,6 +111,7 @@
         });
 
         $.ajaxSetup({async : false});
+        $("#remark").val([[${deviceinfo.remark}]]);
         $("#isActivated").val([[${deviceinfo.isActivated}]]);
         $("#type").val([[${deviceinfo.type}]]);
         $("#type").trigger('change');

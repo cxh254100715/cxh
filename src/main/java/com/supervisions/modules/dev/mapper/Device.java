@@ -11,7 +11,7 @@ public class Device extends PageDomain
 
 	/** 名称 */
     private String name;
-	/** 类型 0:tv 1:box 2:camera */
+	/** 类型 0:box 1:tv 2:camera */
     private Integer type;
 	/** 型号 */
     private String model;

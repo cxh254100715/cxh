@@ -10,6 +10,7 @@ import com.supervisions.framework.shiro.service.PasswordService;
 import com.supervisions.framework.web.controller.BaseController;
 import com.supervisions.framework.web.domain.Message;
 import com.supervisions.framework.web.page.TableDataInfo;
+import com.supervisions.framework.web.service.RedisService;
 import com.supervisions.modules.sys.mapper.Role;
 import com.supervisions.modules.sys.mapper.User;
 import com.supervisions.modules.sys.service.IRoleService;
